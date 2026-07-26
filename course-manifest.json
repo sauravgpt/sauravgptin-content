@@ -179,72 +179,82 @@
             {
               "id": "module-3-core-building-blocks-load-balancing",
               "slug": "load-balancing",
-              "title": "Load Balancing (Intro + Techniques)",
+              "title": "Load Balancing: Distributing Traffic at Scale",
               "order": 1,
-              "path": "learn/system-design/module-3-core-building-blocks/load-balancing.md"
+              "path": "learn/system-design/module-3-core-building-blocks/load-balancing.md",
+              "secondaryTitle": "Load Balancing"
             },
             {
               "id": "module-3-core-building-blocks-cdn",
               "slug": "cdn",
-              "title": "CDN",
+              "title": "Content Delivery Networks (CDN): Serving Users at the Edge",
               "order": 2,
-              "path": "learn/system-design/module-3-core-building-blocks/cdn.md"
+              "path": "learn/system-design/module-3-core-building-blocks/cdn.md",
+              "secondaryTitle": "CDN"
             },
             {
               "id": "module-3-core-building-blocks-caching-advanced",
               "slug": "caching-advanced",
-              "title": "Caching Advanced",
+              "title": "Advanced Caching: Patterns, Pitfalls & Scale",
               "order": 3,
-              "path": "learn/system-design/module-3-core-building-blocks/caching-advanced.md"
+              "path": "learn/system-design/module-3-core-building-blocks/caching-advanced.md",
+              "secondaryTitle": "Advanced Caching"
             },
             {
               "id": "module-3-core-building-blocks-rate-limiting",
               "slug": "rate-limiting",
-              "title": "Rate Limiting",
+              "title": "Rate Limiting: Protecting Systems from Overload",
               "order": 4,
-              "path": "learn/system-design/module-3-core-building-blocks/rate-limiting.md"
+              "path": "learn/system-design/module-3-core-building-blocks/rate-limiting.md",
+              "secondaryTitle": "Rate Limiting"
             },
             {
               "id": "module-3-core-building-blocks-forward-reverse-proxy",
               "slug": "forward-reverse-proxy",
-              "title": "Forward Proxy & Reverse Proxy",
+              "title": "Forward Proxy & Reverse Proxy: Intermediaries in the Request Path",
               "order": 5,
-              "path": "learn/system-design/module-3-core-building-blocks/forward-reverse-proxy.md"
+              "path": "learn/system-design/module-3-core-building-blocks/forward-reverse-proxy.md",
+              "secondaryTitle": "Proxies"
             },
             {
               "id": "module-3-core-building-blocks-scale-cube",
               "slug": "scale-cube",
-              "title": "Scale Cube",
+              "title": "The Scale Cube: Three Dimensions of Scaling",
               "order": 6,
-              "path": "learn/system-design/module-3-core-building-blocks/scale-cube.md"
+              "path": "learn/system-design/module-3-core-building-blocks/scale-cube.md",
+              "secondaryTitle": "Scale Cube"
             },
             {
               "id": "module-3-core-building-blocks-idempotency",
               "slug": "idempotency",
-              "title": "Idempotency",
+              "title": "Idempotency: Designing Safe Retries",
               "order": 7,
-              "path": "learn/system-design/module-3-core-building-blocks/idempotency.md"
+              "path": "learn/system-design/module-3-core-building-blocks/idempotency.md",
+              "secondaryTitle": "Idempotency"
             },
             {
               "id": "module-3-core-building-blocks-bloom-filters",
               "slug": "bloom-filters",
-              "title": "Bloom Filters",
+              "title": "Bloom Filters: Probabilistic Membership Checks",
               "order": 8,
-              "path": "learn/system-design/module-3-core-building-blocks/bloom-filters.md"
+              "path": "learn/system-design/module-3-core-building-blocks/bloom-filters.md",
+              "secondaryTitle": "Bloom Filters"
             },
             {
               "id": "module-3-core-building-blocks-pub-sub-event-driven-architectures",
               "slug": "pub-sub-event-driven-architectures",
               "title": "Pub/Sub & Event-Driven Architectures",
               "order": 9,
-              "path": "learn/system-design/module-3-core-building-blocks/pub-sub-event-driven-architectures.md"
+              "path": "learn/system-design/module-3-core-building-blocks/pub-sub-event-driven-architectures.md",
+              "secondaryTitle": "Pub/Sub"
             },
             {
               "id": "module-3-core-building-blocks-monolith-vs-microservices",
               "slug": "monolith-vs-microservices",
-              "title": "Monolith vs Microservices",
+              "title": "Monolith vs Microservices: Choosing an Architecture",
               "order": 10,
-              "path": "learn/system-design/module-3-core-building-blocks/monolith-vs-microservices.md"
+              "path": "learn/system-design/module-3-core-building-blocks/monolith-vs-microservices.md",
+              "secondaryTitle": "Architecture Styles"
             }
           ]
         },
@@ -256,72 +266,82 @@
             {
               "id": "module-4-data-layer-and-storage-database-indexing",
               "slug": "database-indexing",
-              "title": "Database Indexing",
+              "title": "Database Indexing: Accelerating Data Access",
               "order": 1,
-              "path": "learn/system-design/module-4-data-layer-and-storage/database-indexing.md"
+              "path": "learn/system-design/module-4-data-layer-and-storage/database-indexing.md",
+              "secondaryTitle": "Indexing"
             },
             {
               "id": "module-4-data-layer-and-storage-consistent-hashing",
               "slug": "consistent-hashing",
-              "title": "Consistent Hashing",
+              "title": "Consistent Hashing: Stable Data Distribution",
               "order": 2,
-              "path": "learn/system-design/module-4-data-layer-and-storage/consistent-hashing.md"
+              "path": "learn/system-design/module-4-data-layer-and-storage/consistent-hashing.md",
+              "secondaryTitle": "Consistent Hashing"
             },
             {
               "id": "module-4-data-layer-and-storage-cap-theorem",
               "slug": "cap-theorem",
-              "title": "CAP Theorem",
+              "title": "CAP Theorem: The Fundamental Trade-off",
               "order": 3,
-              "path": "learn/system-design/module-4-data-layer-and-storage/cap-theorem.md"
+              "path": "learn/system-design/module-4-data-layer-and-storage/cap-theorem.md",
+              "secondaryTitle": "CAP Theorem"
             },
             {
               "id": "module-4-data-layer-and-storage-key-value-stores",
               "slug": "key-value-stores",
-              "title": "Key-Value Stores",
+              "title": "Key-Value Stores: Simple Model, Massive Scale",
               "order": 4,
-              "path": "learn/system-design/module-4-data-layer-and-storage/key-value-stores.md"
+              "path": "learn/system-design/module-4-data-layer-and-storage/key-value-stores.md",
+              "secondaryTitle": "KV Stores"
             },
             {
               "id": "module-4-data-layer-and-storage-blob-storage",
               "slug": "blob-storage",
-              "title": "Blob Storage",
+              "title": "Blob Storage: Storing Unstructured Data at Scale",
               "order": 5,
-              "path": "learn/system-design/module-4-data-layer-and-storage/blob-storage.md"
+              "path": "learn/system-design/module-4-data-layer-and-storage/blob-storage.md",
+              "secondaryTitle": "Blob Storage"
             },
             {
               "id": "module-4-data-layer-and-storage-partitioning",
               "slug": "partitioning",
-              "title": "Partitioning",
+              "title": "Partitioning: Splitting Data for Scale",
               "order": 6,
-              "path": "learn/system-design/module-4-data-layer-and-storage/partitioning.md"
+              "path": "learn/system-design/module-4-data-layer-and-storage/partitioning.md",
+              "secondaryTitle": "Partitioning"
             },
             {
               "id": "module-4-data-layer-and-storage-sharding",
               "slug": "sharding",
-              "title": "Sharding",
+              "title": "Sharding: Horizontal Scaling in Practice",
               "order": 7,
-              "path": "learn/system-design/module-4-data-layer-and-storage/sharding.md"
+              "path": "learn/system-design/module-4-data-layer-and-storage/sharding.md",
+              "secondaryTitle": "Sharding"
             },
             {
               "id": "module-4-data-layer-and-storage-mapreduce-distributed-processing",
               "slug": "mapreduce-distributed-processing",
-              "title": "MapReduce & Distributed Processing",
+              "title": "MapReduce & Distributed Data Processing",
               "order": 8,
-              "path": "learn/system-design/module-4-data-layer-and-storage/mapreduce-distributed-processing.md"
+              "path": "learn/system-design/module-4-data-layer-and-storage/mapreduce-distributed-processing.md",
+              "secondaryTitle": "MapReduce"
             },
             {
               "id": "module-4-data-layer-and-storage-mastering-latency-metrics",
               "slug": "mastering-latency-metrics",
-              "title": "Mastering Latency Metrics",
+              "title": "Mastering Latency Metrics: Percentiles & Tail Latency",
               "order": 9,
-              "path": "learn/system-design/module-4-data-layer-and-storage/mastering-latency-metrics.md"
+              "path": "learn/system-design/module-4-data-layer-and-storage/mastering-latency-metrics.md",
+              "secondaryTitle": "Latency Metrics"
             },
             {
               "id": "module-4-data-layer-and-storage-replication-advanced",
               "slug": "replication-advanced",
-              "title": "Replication Advanced",
+              "title": "Advanced Replication: Multi-Leader, Quorums & Conflict Resolution",
               "order": 10,
-              "path": "learn/system-design/module-4-data-layer-and-storage/replication-advanced.md"
+              "path": "learn/system-design/module-4-data-layer-and-storage/replication-advanced.md",
+              "secondaryTitle": "Advanced Replication"
             }
           ]
         }
