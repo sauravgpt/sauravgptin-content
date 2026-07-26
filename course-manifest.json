@@ -327,6 +327,137 @@
         }
       ],
       "description": "Master the art of building scalable architecture, from basics to production-grade systems."
+    },
+    {
+      "slug": "generative-artificial-intelligence",
+      "title": "Generative Artificial Intelligence",
+      "description": "Understand how modern generative AI works — from LLM internals and prompting to RAG, agents, and production-grade GenAI applications.",
+      "modules": [
+        {
+          "slug": "module-1-foundations-of-generative-ai",
+          "title": "Foundations of Generative AI",
+          "order": 1,
+          "lessons": [
+            {
+              "id": "module-1-foundations-of-generative-ai-what-is-generative-ai",
+              "slug": "what-is-generative-ai",
+              "title": "What is Generative AI?",
+              "order": 1,
+              "path": "learn/generative-artificial-intelligence/module-1-foundations-of-generative-ai/what-is-generative-ai.md",
+              "secondaryTitle": "GenAI Intro"
+            },
+            {
+              "id": "module-1-foundations-of-generative-ai-how-llms-work",
+              "slug": "how-llms-work",
+              "title": "How Large Language Models Work",
+              "order": 2,
+              "path": "learn/generative-artificial-intelligence/module-1-foundations-of-generative-ai/how-llms-work.md",
+              "secondaryTitle": "LLM Internals"
+            },
+            {
+              "id": "module-1-foundations-of-generative-ai-tokens-embeddings-context-windows",
+              "slug": "tokens-embeddings-context-windows",
+              "title": "Tokens, Embeddings & Context Windows",
+              "order": 3,
+              "path": "learn/generative-artificial-intelligence/module-1-foundations-of-generative-ai/tokens-embeddings-context-windows.md",
+              "secondaryTitle": "Tokens & Embeddings"
+            }
+          ]
+        },
+        {
+          "slug": "module-2-prompt-engineering",
+          "title": "Prompt Engineering",
+          "order": 2,
+          "lessons": [
+            {
+              "id": "module-2-prompt-engineering-prompting-fundamentals",
+              "slug": "prompting-fundamentals",
+              "title": "Prompting Fundamentals",
+              "order": 1,
+              "path": "learn/generative-artificial-intelligence/module-2-prompt-engineering/prompting-fundamentals.md",
+              "secondaryTitle": "Prompting Basics"
+            },
+            {
+              "id": "module-2-prompt-engineering-advanced-prompting-techniques",
+              "slug": "advanced-prompting-techniques",
+              "title": "Advanced Prompting Techniques",
+              "order": 2,
+              "path": "learn/generative-artificial-intelligence/module-2-prompt-engineering/advanced-prompting-techniques.md",
+              "secondaryTitle": "Advanced Prompting"
+            },
+            {
+              "id": "module-2-prompt-engineering-structured-outputs",
+              "slug": "structured-outputs",
+              "title": "Structured Outputs & Function Calling",
+              "order": 3,
+              "path": "learn/generative-artificial-intelligence/module-2-prompt-engineering/structured-outputs.md",
+              "secondaryTitle": "Structured Outputs"
+            }
+          ]
+        },
+        {
+          "slug": "module-3-retrieval-augmented-generation",
+          "title": "Retrieval-Augmented Generation",
+          "order": 3,
+          "lessons": [
+            {
+              "id": "module-3-retrieval-augmented-generation-rag-fundamentals",
+              "slug": "rag-fundamentals",
+              "title": "RAG Fundamentals",
+              "order": 1,
+              "path": "learn/generative-artificial-intelligence/module-3-retrieval-augmented-generation/rag-fundamentals.md",
+              "secondaryTitle": "RAG Intro"
+            },
+            {
+              "id": "module-3-retrieval-augmented-generation-vector-databases",
+              "slug": "vector-databases",
+              "title": "Vector Databases & Similarity Search",
+              "order": 2,
+              "path": "learn/generative-artificial-intelligence/module-3-retrieval-augmented-generation/vector-databases.md",
+              "secondaryTitle": "Vector DBs"
+            },
+            {
+              "id": "module-3-retrieval-augmented-generation-chunking-and-retrieval-strategies",
+              "slug": "chunking-and-retrieval-strategies",
+              "title": "Chunking & Retrieval Strategies",
+              "order": 3,
+              "path": "learn/generative-artificial-intelligence/module-3-retrieval-augmented-generation/chunking-and-retrieval-strategies.md",
+              "secondaryTitle": "Chunking"
+            }
+          ]
+        },
+        {
+          "slug": "module-4-building-genai-applications",
+          "title": "Building GenAI Applications",
+          "order": 4,
+          "lessons": [
+            {
+              "id": "module-4-building-genai-applications-agents-and-tool-use",
+              "slug": "agents-and-tool-use",
+              "title": "AI Agents & Tool Use",
+              "order": 1,
+              "path": "learn/generative-artificial-intelligence/module-4-building-genai-applications/agents-and-tool-use.md",
+              "secondaryTitle": "Agents"
+            },
+            {
+              "id": "module-4-building-genai-applications-fine-tuning-vs-rag",
+              "slug": "fine-tuning-vs-rag",
+              "title": "Fine-Tuning vs. RAG: Choosing a Customization Strategy",
+              "order": 2,
+              "path": "learn/generative-artificial-intelligence/module-4-building-genai-applications/fine-tuning-vs-rag.md",
+              "secondaryTitle": "Fine-Tuning vs RAG"
+            },
+            {
+              "id": "module-4-building-genai-applications-evaluation-and-safety",
+              "slug": "evaluation-and-safety",
+              "title": "Evaluation, Guardrails & Safety",
+              "order": 3,
+              "path": "learn/generative-artificial-intelligence/module-4-building-genai-applications/evaluation-and-safety.md",
+              "secondaryTitle": "Evals & Safety"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
