@@ -33,6 +33,7 @@ https://cdn.jsdelivr.net/gh/sauravgpt/sauravgptin-content@main/<path>
 |---|---|---|
 | System Design | `system-design` | Foundations, Non-Functional Requirements, Core Building Blocks, Data Layer & Storage |
 | Generative Artificial Intelligence | `generative-artificial-intelligence` | Foundations of GenAI, Prompt Engineering, Retrieval-Augmented Generation, Building GenAI Applications |
+| Data Structures & Algorithms | `data-structures-and-algorithms` | Foundations & Complexity Analysis, Core Data Structures, Trees & Graphs, Algorithmic Patterns |
 
 ## How it works
 

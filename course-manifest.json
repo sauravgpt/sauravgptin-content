@@ -458,6 +458,137 @@
           ]
         }
       ]
+    },
+    {
+      "slug": "data-structures-and-algorithms",
+      "title": "Data Structures & Algorithms",
+      "description": "Interview-grade DSA from the ground up — complexity analysis, core data structures, trees and graphs, and the algorithmic patterns behind most coding problems.",
+      "modules": [
+        {
+          "slug": "module-1-foundations-and-complexity-analysis",
+          "title": "Foundations & Complexity Analysis",
+          "order": 1,
+          "lessons": [
+            {
+              "id": "module-1-foundations-and-complexity-analysis-big-o-notation",
+              "slug": "big-o-notation",
+              "title": "Big-O Notation & Complexity Analysis",
+              "order": 1,
+              "path": "learn/data-structures-and-algorithms/module-1-foundations-and-complexity-analysis/big-o-notation.md",
+              "secondaryTitle": "Big-O"
+            },
+            {
+              "id": "module-1-foundations-and-complexity-analysis-arrays-and-strings",
+              "slug": "arrays-and-strings",
+              "title": "Arrays & Strings",
+              "order": 2,
+              "path": "learn/data-structures-and-algorithms/module-1-foundations-and-complexity-analysis/arrays-and-strings.md",
+              "secondaryTitle": "Arrays & Strings"
+            },
+            {
+              "id": "module-1-foundations-and-complexity-analysis-hash-tables",
+              "slug": "hash-tables",
+              "title": "Hash Tables",
+              "order": 3,
+              "path": "learn/data-structures-and-algorithms/module-1-foundations-and-complexity-analysis/hash-tables.md",
+              "secondaryTitle": "Hash Tables"
+            }
+          ]
+        },
+        {
+          "slug": "module-2-core-data-structures",
+          "title": "Core Data Structures",
+          "order": 2,
+          "lessons": [
+            {
+              "id": "module-2-core-data-structures-linked-lists",
+              "slug": "linked-lists",
+              "title": "Linked Lists",
+              "order": 1,
+              "path": "learn/data-structures-and-algorithms/module-2-core-data-structures/linked-lists.md",
+              "secondaryTitle": "Linked Lists"
+            },
+            {
+              "id": "module-2-core-data-structures-stacks-and-queues",
+              "slug": "stacks-and-queues",
+              "title": "Stacks & Queues",
+              "order": 2,
+              "path": "learn/data-structures-and-algorithms/module-2-core-data-structures/stacks-and-queues.md",
+              "secondaryTitle": "Stacks & Queues"
+            },
+            {
+              "id": "module-2-core-data-structures-heaps-and-priority-queues",
+              "slug": "heaps-and-priority-queues",
+              "title": "Heaps & Priority Queues",
+              "order": 3,
+              "path": "learn/data-structures-and-algorithms/module-2-core-data-structures/heaps-and-priority-queues.md",
+              "secondaryTitle": "Heaps"
+            }
+          ]
+        },
+        {
+          "slug": "module-3-trees-and-graphs",
+          "title": "Trees & Graphs",
+          "order": 3,
+          "lessons": [
+            {
+              "id": "module-3-trees-and-graphs-binary-trees-and-bst",
+              "slug": "binary-trees-and-bst",
+              "title": "Binary Trees & Binary Search Trees",
+              "order": 1,
+              "path": "learn/data-structures-and-algorithms/module-3-trees-and-graphs/binary-trees-and-bst.md",
+              "secondaryTitle": "Trees & BSTs"
+            },
+            {
+              "id": "module-3-trees-and-graphs-graphs-and-traversals",
+              "slug": "graphs-and-traversals",
+              "title": "Graphs, BFS & DFS",
+              "order": 2,
+              "path": "learn/data-structures-and-algorithms/module-3-trees-and-graphs/graphs-and-traversals.md",
+              "secondaryTitle": "Graphs"
+            },
+            {
+              "id": "module-3-trees-and-graphs-tries",
+              "slug": "tries",
+              "title": "Tries (Prefix Trees)",
+              "order": 3,
+              "path": "learn/data-structures-and-algorithms/module-3-trees-and-graphs/tries.md",
+              "secondaryTitle": "Tries"
+            }
+          ]
+        },
+        {
+          "slug": "module-4-algorithmic-patterns",
+          "title": "Algorithmic Patterns",
+          "order": 4,
+          "lessons": [
+            {
+              "id": "module-4-algorithmic-patterns-two-pointers-and-sliding-window",
+              "slug": "two-pointers-and-sliding-window",
+              "title": "Two Pointers & Sliding Window",
+              "order": 1,
+              "path": "learn/data-structures-and-algorithms/module-4-algorithmic-patterns/two-pointers-and-sliding-window.md",
+              "secondaryTitle": "Two Pointers"
+            },
+            {
+              "id": "module-4-algorithmic-patterns-binary-search",
+              "slug": "binary-search",
+              "title": "Binary Search & Its Variants",
+              "order": 2,
+              "path": "learn/data-structures-and-algorithms/module-4-algorithmic-patterns/binary-search.md",
+              "secondaryTitle": "Binary Search"
+            },
+            {
+              "id": "module-4-algorithmic-patterns-dynamic-programming",
+              "slug": "dynamic-programming",
+              "title": "Dynamic Programming Fundamentals",
+              "order": 3,
+              "path": "learn/data-structures-and-algorithms/module-4-algorithmic-patterns/dynamic-programming.md",
+              "secondaryTitle": "DP Basics"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
