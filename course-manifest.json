@@ -1,0 +1,332 @@
+{
+  "version": 1,
+  "tracks": [
+    {
+      "slug": "system-design",
+      "title": "System Design",
+      "modules": [
+        {
+          "slug": "module-1-foundations-of-system-design",
+          "title": "Foundations of System Design",
+          "order": 1,
+          "lessons": [
+            {
+              "id": "module-1-foundations-of-system-design-client-server-architecture",
+              "slug": "client-server-architecture",
+              "title": "Client-Server Architecture Patterns",
+              "order": 1,
+              "path": "learn/system-design/module-1-foundations-of-system-design/client-server-architecture.md",
+              "secondaryTitle": "Client-Server"
+            },
+            {
+              "id": "module-1-foundations-of-system-design-tcp-ip-http-basics",
+              "slug": "tcp-ip-http-basics",
+              "title": "The Pillars of Network Communication: IP, TCP, and HTTP",
+              "order": 2,
+              "path": "learn/system-design/module-1-foundations-of-system-design/tcp-ip-http-basics.md",
+              "secondaryTitle": "Network Basics"
+            },
+            {
+              "id": "module-1-foundations-of-system-design-polling-vs-streaming",
+              "slug": "polling-vs-streaming",
+              "title": "Real-Time Communication: Polling vs. Streaming",
+              "order": 3,
+              "path": "learn/system-design/module-1-foundations-of-system-design/polling-vs-streaming.md",
+              "secondaryTitle": "Polling/Streaming"
+            },
+            {
+              "id": "module-1-foundations-of-system-design-websockets-and-streaming-fundamentals",
+              "slug": "websockets-and-streaming-fundamentals",
+              "title": "Real-Time Communication: WebSockets, Polling & Streaming",
+              "order": 4,
+              "path": "learn/system-design/module-1-foundations-of-system-design/websockets-and-streaming-fundamentals.md",
+              "secondaryTitle": "WebSockets"
+            },
+            {
+              "id": "module-1-foundations-of-system-design-caching",
+              "slug": "caching",
+              "title": "Advanced Caching Strategies in Distributed Systems",
+              "order": 5,
+              "path": "learn/system-design/module-1-foundations-of-system-design/caching.md",
+              "secondaryTitle": "Caching Strategies"
+            },
+            {
+              "id": "module-1-foundations-of-system-design-hashing",
+              "slug": "hashing",
+              "title": "Distributed Hashing Strategy",
+              "order": 6,
+              "path": "learn/system-design/module-1-foundations-of-system-design/hashing.md",
+              "secondaryTitle": "Hashing"
+            },
+            {
+              "id": "module-1-foundations-of-system-design-latency-throughput",
+              "slug": "latency-throughput",
+              "title": "Latency vs. Throughput: Mastering System Performance Metrics",
+              "order": 7,
+              "path": "learn/system-design/module-1-foundations-of-system-design/latency-throughput.md",
+              "secondaryTitle": "System Metrics"
+            },
+            {
+              "id": "module-1-foundations-of-system-design-replication",
+              "slug": "replication",
+              "title": "Database Replication: Strategies & Scalability",
+              "order": 8,
+              "path": "learn/system-design/module-1-foundations-of-system-design/replication.md",
+              "secondaryTitle": "Replication"
+            },
+            {
+              "id": "module-1-foundations-of-system-design-single-point-of-failure",
+              "slug": "single-point-of-failure",
+              "title": "Designing Resilient Systems: Eliminating Single Points of Failure",
+              "order": 9,
+              "path": "learn/system-design/module-1-foundations-of-system-design/single-point-of-failure.md",
+              "secondaryTitle": "Resilience"
+            },
+            {
+              "id": "module-1-foundations-of-system-design-pre-signed-urls",
+              "slug": "pre-signed-urls",
+              "title": "Direct-to-Object-Storage: Pre-signed URLs",
+              "order": 10,
+              "path": "learn/system-design/module-1-foundations-of-system-design/pre-signed-urls.md",
+              "secondaryTitle": "Pre-signed URLs"
+            },
+            {
+              "id": "module-1-foundations-of-system-design-heartbeat",
+              "slug": "heartbeat",
+              "title": "Failover & Health Monitoring: The Heartbeat Pattern",
+              "order": 11,
+              "path": "learn/system-design/module-1-foundations-of-system-design/heartbeat.md",
+              "secondaryTitle": "Heartbeat Pattern"
+            },
+            {
+              "id": "module-1-foundations-of-system-design-dns",
+              "slug": "dns",
+              "title": "Global Traffic Routing & Domain Name System (DNS)",
+              "order": 12,
+              "path": "learn/system-design/module-1-foundations-of-system-design/dns.md",
+              "secondaryTitle": "DNS"
+            }
+          ]
+        },
+        {
+          "slug": "module-2-non-functional-requirements",
+          "title": "Non-Functional Requirements",
+          "order": 2,
+          "lessons": [
+            {
+              "id": "module-2-non-functional-requirements-availability",
+              "slug": "availability",
+              "title": "System Availability: Designing for Uptime & Reliability",
+              "order": 1,
+              "path": "learn/system-design/module-2-non-functional-requirements/availability.md",
+              "secondaryTitle": "Availability"
+            },
+            {
+              "id": "module-2-non-functional-requirements-latency",
+              "slug": "latency",
+              "title": "System Latency: Designing for Speed & Responsiveness",
+              "order": 2,
+              "path": "learn/system-design/module-2-non-functional-requirements/latency.md",
+              "secondaryTitle": "Latency"
+            },
+            {
+              "id": "module-2-non-functional-requirements-scale",
+              "slug": "scale",
+              "title": "System Scale: Designing for Growth & High Load",
+              "order": 3,
+              "path": "learn/system-design/module-2-non-functional-requirements/scale.md",
+              "secondaryTitle": "Scale"
+            },
+            {
+              "id": "module-2-non-functional-requirements-consistency",
+              "slug": "consistency",
+              "title": "Consistency in Distributed Systems",
+              "order": 4,
+              "path": "learn/system-design/module-2-non-functional-requirements/consistency.md",
+              "secondaryTitle": "Consistency"
+            },
+            {
+              "id": "module-2-non-functional-requirements-durability",
+              "slug": "durability",
+              "title": "Data Durability & Persistence Guarantees",
+              "order": 5,
+              "path": "learn/system-design/module-2-non-functional-requirements/durability.md",
+              "secondaryTitle": "Durability"
+            },
+            {
+              "id": "module-2-non-functional-requirements-read-write-ratio",
+              "slug": "read-write-ratio",
+              "title": "Read-Write Ratio",
+              "order": 6,
+              "path": "learn/system-design/module-2-non-functional-requirements/read-write-ratio.md",
+              "secondaryTitle": "R/W Ratio"
+            },
+            {
+              "id": "module-2-non-functional-requirements-high-availability-fault-tolerance",
+              "slug": "high-availability-fault-tolerance",
+              "title": "High Availability & Fault Tolerance",
+              "order": 7,
+              "path": "learn/system-design/module-2-non-functional-requirements/high-availability-fault-tolerance.md",
+              "secondaryTitle": "HA vs Fault Tolerance"
+            }
+          ]
+        },
+        {
+          "slug": "module-3-core-building-blocks",
+          "title": "Core Building Blocks",
+          "order": 3,
+          "lessons": [
+            {
+              "id": "module-3-core-building-blocks-load-balancing",
+              "slug": "load-balancing",
+              "title": "Load Balancing (Intro + Techniques)",
+              "order": 1,
+              "path": "learn/system-design/module-3-core-building-blocks/load-balancing.md"
+            },
+            {
+              "id": "module-3-core-building-blocks-cdn",
+              "slug": "cdn",
+              "title": "CDN",
+              "order": 2,
+              "path": "learn/system-design/module-3-core-building-blocks/cdn.md"
+            },
+            {
+              "id": "module-3-core-building-blocks-caching-advanced",
+              "slug": "caching-advanced",
+              "title": "Caching Advanced",
+              "order": 3,
+              "path": "learn/system-design/module-3-core-building-blocks/caching-advanced.md"
+            },
+            {
+              "id": "module-3-core-building-blocks-rate-limiting",
+              "slug": "rate-limiting",
+              "title": "Rate Limiting",
+              "order": 4,
+              "path": "learn/system-design/module-3-core-building-blocks/rate-limiting.md"
+            },
+            {
+              "id": "module-3-core-building-blocks-forward-reverse-proxy",
+              "slug": "forward-reverse-proxy",
+              "title": "Forward Proxy & Reverse Proxy",
+              "order": 5,
+              "path": "learn/system-design/module-3-core-building-blocks/forward-reverse-proxy.md"
+            },
+            {
+              "id": "module-3-core-building-blocks-scale-cube",
+              "slug": "scale-cube",
+              "title": "Scale Cube",
+              "order": 6,
+              "path": "learn/system-design/module-3-core-building-blocks/scale-cube.md"
+            },
+            {
+              "id": "module-3-core-building-blocks-idempotency",
+              "slug": "idempotency",
+              "title": "Idempotency",
+              "order": 7,
+              "path": "learn/system-design/module-3-core-building-blocks/idempotency.md"
+            },
+            {
+              "id": "module-3-core-building-blocks-bloom-filters",
+              "slug": "bloom-filters",
+              "title": "Bloom Filters",
+              "order": 8,
+              "path": "learn/system-design/module-3-core-building-blocks/bloom-filters.md"
+            },
+            {
+              "id": "module-3-core-building-blocks-pub-sub-event-driven-architectures",
+              "slug": "pub-sub-event-driven-architectures",
+              "title": "Pub/Sub & Event-Driven Architectures",
+              "order": 9,
+              "path": "learn/system-design/module-3-core-building-blocks/pub-sub-event-driven-architectures.md"
+            },
+            {
+              "id": "module-3-core-building-blocks-monolith-vs-microservices",
+              "slug": "monolith-vs-microservices",
+              "title": "Monolith vs Microservices",
+              "order": 10,
+              "path": "learn/system-design/module-3-core-building-blocks/monolith-vs-microservices.md"
+            }
+          ]
+        },
+        {
+          "slug": "module-4-data-layer-and-storage",
+          "title": "Data Layer & Storage",
+          "order": 4,
+          "lessons": [
+            {
+              "id": "module-4-data-layer-and-storage-database-indexing",
+              "slug": "database-indexing",
+              "title": "Database Indexing",
+              "order": 1,
+              "path": "learn/system-design/module-4-data-layer-and-storage/database-indexing.md"
+            },
+            {
+              "id": "module-4-data-layer-and-storage-consistent-hashing",
+              "slug": "consistent-hashing",
+              "title": "Consistent Hashing",
+              "order": 2,
+              "path": "learn/system-design/module-4-data-layer-and-storage/consistent-hashing.md"
+            },
+            {
+              "id": "module-4-data-layer-and-storage-cap-theorem",
+              "slug": "cap-theorem",
+              "title": "CAP Theorem",
+              "order": 3,
+              "path": "learn/system-design/module-4-data-layer-and-storage/cap-theorem.md"
+            },
+            {
+              "id": "module-4-data-layer-and-storage-key-value-stores",
+              "slug": "key-value-stores",
+              "title": "Key-Value Stores",
+              "order": 4,
+              "path": "learn/system-design/module-4-data-layer-and-storage/key-value-stores.md"
+            },
+            {
+              "id": "module-4-data-layer-and-storage-blob-storage",
+              "slug": "blob-storage",
+              "title": "Blob Storage",
+              "order": 5,
+              "path": "learn/system-design/module-4-data-layer-and-storage/blob-storage.md"
+            },
+            {
+              "id": "module-4-data-layer-and-storage-partitioning",
+              "slug": "partitioning",
+              "title": "Partitioning",
+              "order": 6,
+              "path": "learn/system-design/module-4-data-layer-and-storage/partitioning.md"
+            },
+            {
+              "id": "module-4-data-layer-and-storage-sharding",
+              "slug": "sharding",
+              "title": "Sharding",
+              "order": 7,
+              "path": "learn/system-design/module-4-data-layer-and-storage/sharding.md"
+            },
+            {
+              "id": "module-4-data-layer-and-storage-mapreduce-distributed-processing",
+              "slug": "mapreduce-distributed-processing",
+              "title": "MapReduce & Distributed Processing",
+              "order": 8,
+              "path": "learn/system-design/module-4-data-layer-and-storage/mapreduce-distributed-processing.md"
+            },
+            {
+              "id": "module-4-data-layer-and-storage-mastering-latency-metrics",
+              "slug": "mastering-latency-metrics",
+              "title": "Mastering Latency Metrics",
+              "order": 9,
+              "path": "learn/system-design/module-4-data-layer-and-storage/mastering-latency-metrics.md"
+            },
+            {
+              "id": "module-4-data-layer-and-storage-replication-advanced",
+              "slug": "replication-advanced",
+              "title": "Replication Advanced",
+              "order": 10,
+              "path": "learn/system-design/module-4-data-layer-and-storage/replication-advanced.md"
+            }
+          ]
+        }
+      ],
+      "description": "Master the art of building scalable architecture, from basics to production-grade systems."
+    }
+  ]
+}
