@@ -415,3 +415,85 @@ assets/
 - File names start with the lesson slug, followed by a short descriptor
 - `shared/` holds reusable animations used across multiple tracks
 - If a lesson has multiple animations, each gets a distinct descriptor suffix
+
+### Theming Lottie animations (light / dark)
+
+The app supports 3 color themes (Minimalist, GenZ, Google) × 2 modes (light/dark) = 6
+combinations. To keep animations manageable, we flatten to **2 embedded themes** inside
+each `.lottie` file: `light` and `dark`. The palette uses **indigo** as the universal
+accent — it blends naturally with all 3 app themes (zinc, fuchsia/violet, Google-blue).
+
+**Universal Lottie color palette:**
+
+| Role | Light (`light` theme) | Dark (`dark` theme) |
+|------|-----------------------|---------------------|
+| Background | `#f4f4f5` | `#27272a` |
+| Surface | `#ffffff` | `#18181b` |
+| Primary/Accent | `#6366f1` | `#a5b4fc` |
+| Secondary | `#64748b` | `#94a3b8` |
+| Foreground/Text | `#1e1b4b` | `#e0e7ff` |
+| Border/Line | `#cbd5e1` | `#475569` |
+| Success | `#16a34a` | `#4ade80` |
+| Error | `#dc2626` | `#f87171` |
+| Info/Highlight | `#2563eb` | `#60a5fa` |
+
+**How it works at runtime:**
+
+1. The app detects the user's current color mode (light or dark).
+2. It passes `themeId: "light"` or `themeId: "dark"` to the `LottieAnimation` component.
+3. The dotLottie player reads the matching embedded theme from the `.lottie` file and
+   swaps all mapped colors instantly — no re-download, no flicker.
+
+**Usage in markdown (with theming):**
+
+````markdown
+```lottie
+{ "src": "https://cdn.jsdelivr.net/gh/sauravgpt/sauravgptin-content@main/assets/lottie/system-design/caching-strategies-layers.lottie", "loop": true, "autoplay": true, "speed": 1, "themeId": "light" }
+```
+````
+
+> **Note:** `themeId` is optional. If omitted, the animation renders with its default
+> (authored) colors. The app will auto-pass the correct `themeId` based on the user's
+> current mode when support is wired up.
+
+**Authoring themed `.lottie` files:**
+
+When creating animations in LottieFiles Creator, define two theme variants inside the
+`.lottie` export using the colors above. The `.lottie` container structure:
+
+```
+my-animation.lottie
+├── animation.json        (raw animation with default/light colors)
+└── themes/
+    ├── light.json        { "primary": "#6366f1", "surface": "#ffffff", ... }
+    └── dark.json         { "primary": "#a5b4fc", "surface": "#18181b", ... }
+```
+
+### Canvas size standards
+
+Lottie is vector-based, so animations scale losslessly — what matters for a consistent
+look is the **aspect ratio**, plus a shared working scale so stroke widths, font sizes,
+and spacing feel uniform across animations. Always pick one of these presets:
+
+| Preset | Size | Ratio | Use for |
+|--------|------|-------|---------|
+| `wide` | 1200 × 500 | 12:5 | Left-to-right pipelines and flow diagrams (e.g. client → server chains, request lifecycles) |
+| `standard` | 1200 × 675 | 16:9 | General diagrams, layered architectures, sequence-style animations — the default when unsure |
+| `tall` | 800 × 1000 | 4:5 | Vertical stacks (e.g. layered caches, protocol stacks, top-down hierarchies) |
+| `square` | 600 × 600 | 1:1 | Icons, spinners, small inline illustrations (most `shared/` animations) |
+
+**Authoring conventions (at the working scales above):**
+
+- Framerate: **60 fps**; duration: **4–8 s**, looping
+- Node boxes: ~**160 × 60 px**, corner roundness **12**
+- Connection lines: **3 px** stroke; container/panel borders: **2 px**, roundness **16**
+- Labels: **16–17 px**; group/panel titles: **15 px**; animated dots: **12–16 px** diameter
+- Keep ~**40 px** minimum padding between content and canvas edges
+
+**Rules:**
+
+- Do NOT invent new canvas sizes — pick the closest preset and adapt the layout
+- The app renders animations at the content column width, so `wide`/`standard` display
+  near 1:1; `tall` and `square` are constrained by height
+- Scene background must be transparent (it isn't exported, but keep it `null` in
+  Creator so the preview matches reality)
