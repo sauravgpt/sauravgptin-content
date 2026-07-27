@@ -200,14 +200,22 @@ language tag and a **valid JSON** payload:
 ```mermaid
 graph LR; A[Start] --> B[End];
 ```
+
+```lottie
+{ "src": "https://cdn.jsdelivr.net/gh/sauravgpt/sauravgptin-content@main/assets/lottie/system-design/caching-strategies-layers.lottie", "loop": true, "autoplay": true, "speed": 1 }
+```
 ````
 
 - `type` for callout: `info | warning | tip | success`.
+- `lottie` props: `src` (required, absolute `https://` URL to a `.lottie` or `.json`
+  file), `loop` (boolean, default `true`), `autoplay` (boolean, default `true`), `speed`
+  (positive number, default `1`). Supports both dotLottie (`.lottie`) and classic Lottie
+  JSON (`.json`) formats.
 - Payloads are parsed with `JSON.parse` only — they must be **strictly valid JSON**
   (double quotes, no trailing commas). An invalid payload is hidden in production and
   shown as an error card in development.
-- `mermaid` works in both Learn and Blog. `quiz` / `match` / `callout` are **Learn-only**
-  (in the Blog they render as plain code).
+- `mermaid` and `lottie` work in both Learn and Blog. `quiz` / `match` / `callout` are
+  **Learn-only** (in the Blog they render as plain code).
 
 ---
 
@@ -279,8 +287,8 @@ panel instead of mis-rendering. Every entry must satisfy:
 - **Zero-rebuild publishing** — content changes go live via the CDN without touching
   the apps.
 - **Manifest-driven** — add a subject/module/lesson by editing content + manifest only.
-- **Interactive lessons** — quizzes, match-the-following, callouts, and Mermaid diagrams
-  authored directly in Markdown.
+- **Interactive lessons** — quizzes, match-the-following, callouts, Lottie animations,
+  and Mermaid diagrams authored directly in Markdown.
 - **Syntax highlighting** for common languages.
 - **Fast & cheap** — static shells on Firebase Hosting + free jsDelivr CDN.
 
@@ -299,8 +307,8 @@ panel instead of mis-rendering. Every entry must satisfy:
   paths and non-https URLs are blocked and show a placeholder.
 - **SEO tradeoff** — content is fetched client-side, so it is not in the initial HTML;
   crawlers that execute JS will still see it.
-- **Interactive blocks are Learn-only** — in the Blog, only `mermaid` + code + Markdown
-  render; `quiz`/`match`/`callout` show as plain code.
+- **Interactive blocks are Learn-only** — in the Blog, only `mermaid` + `lottie` + code +
+  Markdown render; `quiz`/`match`/`callout` show as plain code.
 - **A malformed manifest breaks the whole section** — validate before pushing.
 
 ---
@@ -312,3 +320,98 @@ panel instead of mis-rendering. Every entry must satisfy:
 **Add a lesson:** create the `.md` → add a `lesson` to the module's `lessons[]` (with `path`, `slug`, `order`) → push → purge.
 
 **Add a blog post:** create `blogs/<slug>.md` → add a `post` to `blog-manifest.json` → push → purge.
+
+---
+
+## 12. Generating Lottie animations (LottieFiles Creator MCP)
+
+This repo uses the **LottieFiles Creator MCP** to generate Lottie JSON animations
+directly from AI prompts. The MCP connects to the browser-based
+[LottieFiles Creator](https://creator.lottiefiles.com) editor, giving full programmatic
+access to scenes, layers, shapes, keyframes, and easing curves.
+
+### Prerequisites
+
+- **Node.js 18+** (for `npx`)
+- **LottieFiles Creator** open in a browser tab with MCP enabled
+- **Kiro CLI** (or any MCP-compatible AI client)
+
+### Setup (already configured)
+
+The MCP is registered in `~/.kiro/settings/mcp.json`:
+
+```json
+"lottiefiles-creator": {
+  "command": "npx",
+  "args": ["-y", "@lottiefiles/creator-mcp@latest"],
+  "disabled": false
+}
+```
+
+### How to use
+
+1. **Open Creator** — navigate to [creator.lottiefiles.com](https://creator.lottiefiles.com)
+2. **Enable MCP** — go to **Settings → MCP Settings → Enable MCP**. You should see
+   "Local MCP bridge connected" in Creator.
+3. **Prompt the AI** — describe the animation you want (e.g. "create a loading spinner",
+   "animate a bouncing ball", "build a checkmark success animation").
+4. **Export** — once the animation looks good in Creator, export it as Lottie JSON from
+   Creator's export menu.
+
+### Important notes
+
+- Only **one MCP client** can connect to Creator at a time. If you get a "bridge
+  unavailable" error, close other editors (Cursor, VS Code, other Kiro sessions) that
+  may have the same MCP running.
+- The AI uses the `run_script` tool to execute JavaScript against the Creator API. It
+  must call `get_rules` and `get_api_doc` (all pages) before writing scripts.
+- **Layer ordering**: first layer in the array renders on top (foreground), last is
+  background. Create foreground layers first.
+- Animations are built in the Creator canvas — you can preview, tweak, and refine them
+  visually before exporting.
+
+### Optional: Motion Design Skill
+
+For higher quality animations (better easing, timing, choreography):
+
+```bash
+npx skills add LottieFiles/motion-design-skill
+```
+
+### Example prompt → result
+
+> "Create a 200×200 loading spinner — blue arc that rotates and pulses over 2 seconds"
+
+This produces a scene with:
+- 200×200 canvas, 60fps, 2s duration
+- Ellipse with blue stroke (no fill)
+- Animated trim path (arc grows/shrinks) + rotation keyframes
+- Smooth cubic-bezier easing on the pulse, linear rotation
+
+### Where to store exported Lottie JSON
+
+Store exported `.lottie` files under `assets/lottie/` in this repo, organized by track:
+
+```
+assets/
+└── lottie/
+    ├── system-design/
+    │   ├── client-server-architecture-flow.lottie
+    │   ├── client-server-architecture-failover.lottie
+    │   ├── caching-strategies-layers.lottie
+    │   └── ...
+    ├── generative-artificial-intelligence/
+    │   └── ...
+    ├── data-structures-and-algorithms/
+    │   └── ...
+    └── shared/
+        ├── loading-spinner.lottie
+        └── success-checkmark.lottie
+```
+
+**Naming convention:** `<lesson-slug>-<descriptor>.lottie`
+
+- Folder names mirror track slugs (same as `learn/` directories)
+- File names start with the lesson slug, followed by a short descriptor
+- `shared/` holds reusable animations used across multiple tracks
+- If a lesson has multiple animations, each gets a distinct descriptor suffix
