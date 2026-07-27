@@ -49,33 +49,8 @@ In this model, communication is strictly driven by the **Request-Response Cycle*
 
 The Client-Server model operates at the application layer but relies on the underlying network infrastructure. It is the bridge between user interfaces and backend data systems.
 
-```mermaid
-graph LR
-  subgraph Client Side
-    Browser[Web Browser]
-    Mobile[Mobile App]
-    IoT[IoT Device]
-  end
-
-  subgraph Network
-    DNS[DNS Resolver]
-    Internet[Public Internet]
-  end
-
-  subgraph Server Side
-    LB[Load Balancer]
-    API[API Gateway]
-    Service[Application Service]
-    DB[(Database)]
-  end
-
-  Browser -->|HTTP/HTTPS| Internet
-  Mobile -->|gRPC/REST| Internet
-  Internet --> DNS
-  Internet --> LB
-  LB --> API
-  API --> Service
-  Service --> DB
+```lottie
+{ "src": "https://cdn.jsdelivr.net/gh/sauravgpt/sauravgptin-content@main/assets/lottie/system-design/client-server-architecture-flow.lottie", "loop": true, "autoplay": true, "speed": 1 }
 ```
 
 1. **Resolution**: The client resolves the server's hostname to an IP address using DNS.
