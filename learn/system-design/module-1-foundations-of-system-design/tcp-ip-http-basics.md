@@ -15,29 +15,8 @@ For any system design interview or senior engineering role, understanding the in
 
 These protocols operate at different layers of the networking stack (often referenced via the OSI or TCP/IP models).
 
-```mermaid
-graph TD
-    subgraph Client [Client Machine]
-        Browser[Browser Application]
-        HTTP_C[HTTP Layer]
-        TCP_C[TCP Layer]
-        IP_C[IP Layer]
-    end
-
-    subgraph Server [Backend Server]
-        App[Web Server / API]
-        HTTP_S[HTTP Layer]
-        TCP_S[TCP Layer]
-        IP_S[IP Layer]
-    end
-
-    Browser -->|Generate Request| HTTP_C
-    HTTP_C -->|Encapsulate| TCP_C
-    TCP_C -->|Segment| IP_C
-    IP_C -->|Packet via Network| IP_S
-    IP_S -->|Reassemble| TCP_S
-    TCP_S -->|Stream| HTTP_S
-    HTTP_S -->|Process| App
+```lottie
+{ "src": "https://cdn.jsdelivr.net/gh/sauravgpt/sauravgptin-content@main/assets/lottie/system-design/tcp-ip-http-basics-protocol-stack.lottie", "loop": true, "autoplay": true, "speed": 1 }
 ```
 
 ### 1. IP (Internet Protocol): The Addressing System
@@ -124,25 +103,8 @@ Establishing a TCP connection involves a "3-Way Handshake" (SYN, SYN-ACK, ACK), 
 *   **Optimized Approach (Keep-Alive)**: Keep the TCP connection open and send multiple HTTP requests over it.
 *   **System Design Tip**: Database clients and Service-to-Service clients should always use **Connection Pooling** to reuse established connections.
 
-```mermaid
-sequenceDiagram
-    participant Client
-    participant Server
-    Note over Client,Server: Without Keep-Alive
-    Client->>Server: TCP Handshake (SYN)
-    Server-->>Client: TCP Handshake (SYN-ACK)
-    Client->>Server: TCP Handshake (ACK)
-    Client->>Server: HTTP GET /A
-    Server-->>Client: HTTP 200 OK
-    Client->>Server: FIN (Close)
-    
-    Note over Client,Server: With Keep-Alive
-    Client->>Server: TCP Handshake
-    Server-->>Client: Established
-    Client->>Server: HTTP GET /A
-    Server-->>Client: HTTP 200 OK
-    Client->>Server: HTTP GET /B
-    Server-->>Client: HTTP 200 OK
+```lottie
+{ "src": "https://cdn.jsdelivr.net/gh/sauravgpt/sauravgptin-content@main/assets/lottie/system-design/tcp-ip-http-basics-keep-alive.lottie", "loop": true, "autoplay": true, "speed": 0.5 }
 ```
 
 ### 2. Multiplexing (HTTP/2)
