@@ -325,18 +325,28 @@ panel instead of mis-rendering. Every entry must satisfy:
 
 ## 12. Generating Lottie animations (LottieFiles Creator MCP)
 
-This repo uses the **LottieFiles Creator MCP** to generate Lottie JSON animations
-directly from AI prompts. The MCP connects to the browser-based
-[LottieFiles Creator](https://creator.lottiefiles.com) editor, giving full programmatic
-access to scenes, layers, shapes, keyframes, and easing curves.
+Animations in this repo are authored with the **LottieFiles Creator MCP**, which drives the
+browser-based [LottieFiles Creator](https://creator.lottiefiles.com) editor
+programmatically — scenes, layers, shapes, keyframes, easing.
+
+> **Canonical style reference:**
+> `assets/lottie/system-design/client-server-architecture-flow.lottie`.
+> When in doubt about colors, sizes, timing, or layer naming, unzip that file and copy what
+> it does. Consistency across animations matters more than any individual design choice.
+
+```bash
+# inspect the reference asset
+unzip -l assets/lottie/system-design/client-server-architecture-flow.lottie
+unzip -p assets/lottie/system-design/client-server-architecture-flow.lottie \
+  a/client-server-architecture-flow.json | python3 -m json.tool | less
+```
 
 ### Prerequisites
 
 - **Node.js 18+** (for `npx`)
 - **LottieFiles Creator** open in a browser tab with MCP enabled
+  (**Settings → MCP Settings → Enable MCP**; Creator shows "Local MCP bridge connected")
 - **Kiro CLI** (or any MCP-compatible AI client)
-
-### Setup (already configured)
 
 The MCP is registered in `~/.kiro/settings/mcp.json`:
 
@@ -348,49 +358,306 @@ The MCP is registered in `~/.kiro/settings/mcp.json`:
 }
 ```
 
-### How to use
+### End-to-end workflow
 
-1. **Open Creator** — navigate to [creator.lottiefiles.com](https://creator.lottiefiles.com)
-2. **Enable MCP** — go to **Settings → MCP Settings → Enable MCP**. You should see
-   "Local MCP bridge connected" in Creator.
-3. **Prompt the AI** — describe the animation you want (e.g. "create a loading spinner",
-   "animate a bouncing ball", "build a checkmark success animation").
-4. **Export** — once the animation looks good in Creator, export it as Lottie JSON from
-   Creator's export menu.
+1. **Human** opens Creator and enables MCP.
+2. **Agent** calls `get_rules` and `get_api_doc` (all pages) — required before any
+   `run_script` call. But see the ordering correction below: **this file overrides
+   `get_rules` where they disagree.**
+3. **Agent** reads the canonical reference asset to pick up the house style.
+4. **Agent** picks a canvas preset, plans the layout, and builds the scene with
+   `run_script`.
+5. **Agent** verifies by *reading values back* (it cannot see the canvas — see
+   "Verifying without eyes").
+6. **Human** eyeballs the animation in Creator, then **exports it manually** — the MCP has
+   **no export method**, so the agent physically cannot finish this step.
+7. **Agent** wires the `.lottie` into the lesson markdown, then push + purge.
 
-### Important notes
+### Sandbox gotchas
 
-- Only **one MCP client** can connect to Creator at a time. If you get a "bridge
-  unavailable" error, close other editors (Cursor, VS Code, other Kiro sessions) that
-  may have the same MCP running.
-- The AI uses the `run_script` tool to execute JavaScript against the Creator API. It
-  must call `get_rules` and `get_api_doc` (all pages) before writing scripts.
-- **Layer ordering**: first layer in the array renders on top (foreground), last is
-  background. Create foreground layers first.
-- Animations are built in the Creator canvas — you can preview, tweak, and refine them
-  visually before exporting.
+Things that will silently waste a cycle if you don't know them:
 
-### Optional: Motion Design Skill
+- **Layer order is PREPEND, not append.** `get_rules` claims new layers are appended and
+  tells you to create foreground first. That is **wrong**. New layers land at the *front* of
+  `scene.layers`, so the **last-created layer renders on top**. Therefore:
+  **create background first, foreground last.** Always verify and correct:
+  ```js
+  console.log(scene.layers.map((l) => l.name)); // index 0 = topmost
+  someLayer.bringToFront();                     // or moveBefore / moveAfter / sendToBack
+  ```
+- **No top-level `await`** — it's a syntax error in the sandbox.
+- **Async output is lost** — `console.log` inside a `.then()` callback is not captured, so
+  `creator.getAvailableFonts()` is effectively unusable. Just hardcode the house font
+  (`fontFamily: 'Cal Sans'`, `fontStyle: 'Regular'`).
+- **No export API** — `ExportFormat` is declared in the types but no export method is
+  exposed. A human must export from Creator's UI.
+- **The agent cannot see the canvas** — no screenshot, no render.
+- **One MCP client at a time.** On "bridge unavailable", close other editors (Cursor,
+  VS Code, other Kiro sessions) running the same MCP.
 
-For higher quality animations (better easing, timing, choreography):
+### Canvas size standards
 
-```bash
-npx skills add LottieFiles/motion-design-skill
+Lottie scales losslessly, so what matters is **aspect ratio** plus a shared working scale
+so stroke widths, font sizes, and spacing stay uniform. Pick one preset — do **not** invent
+new sizes:
+
+| Preset | Size | Ratio | Use for |
+|--------|------|-------|---------|
+| `wide` | 1200 × 500 | 12:5 | Left-to-right pipelines and flow diagrams (e.g. client → server chains, request lifecycles) |
+| `standard` | 1200 × 675 | 16:9 | General diagrams, layered architectures, sequence-style animations — the default when unsure |
+| `tall` | 800 × 1000 | 4:5 | Vertical stacks (e.g. layered caches, protocol stacks, top-down hierarchies) |
+| `square` | 600 × 600 | 1:1 | Icons, spinners, small inline illustrations (most `shared/` animations) |
+
+- The app renders animations at the content column width, so `wide`/`standard` display near
+  1:1; `tall` and `square` are constrained by height.
+- Scene background must be **transparent** (`scene.backgroundColor = null`). It isn't
+  exported either way, but keeping it null makes the Creator preview match reality.
+- Keep ~**40 px** minimum padding between content and the canvas edges.
+
+### Palette (light — the only palette currently shipped)
+
+Indigo is the universal accent: it blends with all three app themes (zinc, fuchsia/violet,
+Google-blue). These are the values actually used by the shipped assets — match them exactly.
+
+| Role | Hex | RGB | Used for |
+|------|-----|-----|----------|
+| Node fill / accent | `#6366f1` | `99, 102, 241` | Node box fill (solid, **no stroke**) |
+| Node label | `#ffffff` | `255, 255, 255` | Text inside node boxes |
+| Connector line | `#64748b` | `100, 116, 139` | Connection lines, edge labels |
+| Packet / data dot | `#f97316` | `249, 115, 22` | Animated dots travelling along lines |
+| Panel fill | `#f4f4f5` | `244, 244, 245` | Container / group panel background |
+| Panel border | `#cbd5e1` | `203, 213, 225` | Container / group panel stroke |
+| Text | `#1e1b4b` | `30, 27, 75` | Group titles, any text outside a node box |
+| Success | `#16a34a` | `22, 163, 74` | Healthy / success state |
+| Error | `#dc2626` | `220, 38, 38` | Failed / timeout state |
+| Surface | `#ffffff` | `255, 255, 255` | Reserved (light surfaces, if needed) |
+
+> Note the distinction: **lines are `#64748b`**, **panel borders are `#cbd5e1`**. They are
+> not interchangeable.
+
+### Component spec
+
+| Element | Spec |
+|---------|------|
+| Node box | Rectangle 160 × 60, roundness **12**, solid `#6366f1` fill, no stroke |
+| Node label | Cal Sans Regular, **17 px** (16 px for short labels), centered, `#ffffff` |
+| Connector line | 2-point path, **3 px** stroke `#64748b`, revealed with a trim path |
+| Packet / dot | Ellipse **16 × 16**, solid `#f97316` fill |
+| Container / panel | Rectangle, roundness **16**, `#f4f4f5` fill + **2 px** `#cbd5e1` stroke |
+| Group title | Cal Sans Regular **15 px**, centered, `#1e1b4b`, placed **inside** the container ~18 px below its top edge |
+| Edge label | Cal Sans Regular **15 px**, centered, `#64748b`, offset clear of the line |
+| Status badge | Cal Sans Regular **16 px**, centered, `#16a34a` / `#dc2626` |
+
+### Coordinate conventions
+
+Non-obvious, and the easiest thing to get wrong:
+
+- **Shape layers**: leave `layer.position` at `{ x: 0, y: 0 }` and give every *shape*
+  **absolute canvas coordinates**. Do not offset via the layer transform.
+- **Text layers**: the opposite — a text layer is placed via `layer.position`, and the value
+  you set equals the render translation (verified via `getMatrix()`). Shape-style absolute
+  coords don't apply.
+- **Text vertical nudge**: for a label centered inside a node box, set
+  `position.y = boxCenterY + 6`. The text anchor sits ~6 px above the optical center at
+  17 px; this nudge matches the shipped asset. Labels *not* inside a box need no nudge.
+- Use `alignment: 'center'` on every label so the x position is the visual center.
+
+```js
+// shape layer: layer stays at origin, shapes carry absolute coords
+const box = scene.createShapeLayer({ name: 'box-lb' });
+box.createRectangle({ position: { x: 470, y: 337 }, size: { width: 160, height: 60 }, roundness: 12 });
+box.createFill({ type: 'SOLID', color: { r: 99, g: 102, b: 241 } });
+
+// text layer: positioned via the layer, +6px optical nudge inside a box
+scene.createTextLayer({
+  name: 'label-Load Balancer', text: 'Load Balancer',
+  position: { x: 470, y: 337 + 6 },
+  fontFamily: 'Cal Sans', fontStyle: 'Regular', fontSize: 17, alignment: 'center',
+  fill: { type: 'SOLID', color: { r: 255, g: 255, b: 255 } },
+});
 ```
 
-### Example prompt → result
+### Animation conventions
 
-> "Create a 200×200 loading spinner — blue arc that rotates and pulses over 2 seconds"
+- **60 fps, 6 s, 360 frames, looping.** Both shipped assets are exactly `0..360`. Stick to
+  this unless the animation genuinely needs a different length.
+- **Every layer spans the full `0..360`.** Control visibility with **opacity keyframes**,
+  not `startFrame` / `endFrame`.
+- **Easing**: `{ type: 'CUBIC_BEZIER', x1: 0.42, y1: 0, x2: 0.58, y2: 1 }` for essentially
+  everything; `LINEAR` only for continuous motion (constant rotation) and for the flat
+  middle of a hold.
+- **Reveal choreography** — staggered, outside-in:
 
-This produces a scene with:
-- 200×200 canvas, 60fps, 2s duration
-- Ellipse with blue stroke (no fill)
-- Animated trim path (arc grows/shrinks) + rotation keyframes
-- Smooth cubic-bezier easing on the pulse, linear rotation
+  | Frames | What |
+  |--------|------|
+  | 0 → 14 | Containers + group titles fade in |
+  | 8 → 22 | Node boxes + node labels fade in |
+  | 22 → 50 | Connector lines draw in (trim path `end` 0 → 100) |
+  | 30 → 42 | Edge labels fade in |
+  | 55 → ~320 | Packets travel; state changes (success/error) fire |
+  | → 348 | **All state reverted** to its frame-0 appearance |
 
-### Where to store exported Lottie JSON
+- **Loop cleanliness is mandatory.** Anything you change mid-animation (box fill colors,
+  badge opacity, packet visibility) must be animated back to its starting value before the
+  loop point, or the loop visibly jumps.
+- **Packet pattern**: fade in over 4 frames before the move, fade out over 4 frames after:
+  `0 @ start-4 → 100 @ start → 100 @ end → 0 @ end+4`.
 
-Store exported `.lottie` files under `assets/lottie/` in this repo, organized by track:
+### Applying the motion-design skill
+
+The [LottieFiles motion-design skill](https://github.com/LottieFiles/motion-design-skill) is
+installed at `.kiro/skills/motion-design/` and loads automatically at session start. It is
+written for **UI motion** (buttons, modals, page transitions). Our animations are **6-second
+explainer diagram loops**, so parts of it do not transfer.
+
+**Precedence:** for anything numeric and repo-specific — canvas presets, palette, component
+sizes, frame budgets — **this file wins**. For craft principles this file doesn't cover —
+choreography, Disney principles, motion layers, emotional intent — **follow the skill.**
+
+#### Declared archetype: Corporate
+
+Per the skill's "one archetype per project" rule, these diagrams are **Corporate /
+Professional**: consistent timing, clear state transitions, functional motion, mostly
+straight paths, **0% overshoot**, no squash-and-stretch. Do not borrow Playful bounce for
+success states — a green fill and a `Success` badge is the whole celebration.
+
+#### Duration palette (our scale, not the skill's)
+
+The skill's duration table tops out at 600 ms because it assumes a user waiting on a UI
+response. Nobody is waiting on a diagram; the viewer is *reading* it, so beats are paced for
+comprehension. Only the skill's "dramatic reveal" tier (600–1200 ms) is in our range.
+
+| Beat | Frames @60fps | ms | Notes |
+|------|---------------|-----|-------|
+| Fade in (container, box, label, badge) | 14–15 | ~240 | Corporate "quick" tier |
+| Connector line draw-in (trim path) | 28 | ~470 | Corporate "slow" tier |
+| State change (box fill flip) | 15 | ~250 | Paired with a badge, never color-only |
+| Packet hop across one edge | 45 | ~750 | "Dramatic reveal" tier |
+| Hold / read beat between steps | 30+ | 500+ | Give the viewer time to parse |
+
+**Numbers in the skill that do NOT apply here:** the element-type duration table
+(tooltip / button / card / modal / page transition), the **500 ms total stagger cap** — our
+reveal choreography deliberately spans frames 0–50 (~830 ms) — and everything about hover,
+press, and release feedback. There is no interaction to respond to.
+
+#### Rules that DO apply — treat as binding
+
+- **No linear easing on spatial movement.** Our exception list is narrow: constant rotation,
+  and the flat middle of a hold. Everything that travels uses a bezier.
+- **Never opacity-only for an important state change.** A server failing changes fill color
+  *and* reveals a badge.
+- **1/3 distance rule** — no unbroken motion across more than a third of the canvas. The
+  response packet travels 750 → 250 px, so it gets an intermediate keyframe at the load
+  balancer. Long hops need a waypoint.
+- **1/3 density rule** — at most one packet in flight at a time. Sequential beats read;
+  simultaneous ones don't.
+- **Follow-through** — child elements trail their parent by 50–150 ms (3–9 frames). This is
+  why boxes fade at 8–22 and not 0–14 with their container.
+- **Readable at full speed**, and **appropriate on the 100th viewing** — these loop forever
+  under a lesson.
+
+#### Easing
+
+Two curves, applied by role:
+
+| Role | Curve | Why |
+|------|-------|-----|
+| Entrances (fades, trim draw-ins) | `(0.2, 0, 0, 1)` | Corporate signature easing; decelerating entrance per the skill's directional rule |
+| On-screen travel, holds, reverts | `(0.42, 0, 0.58, 1)` | Symmetric ease-in-out — correct for motion that starts and ends on screen |
+
+The already-shipped `client-server-architecture-flow.lottie` uses the symmetric curve
+everywhere. **Don't retrofit it** — the difference is confined to entrances and is not
+perceptible side by side.
+
+#### Ambient layer (currently missing — fix in new animations)
+
+The skill requires three motion layers, and our existing assets only have two: **primary**
+(packets travelling) and **secondary** (state colors, badges). No **ambient** layer, which
+the skill flags as a quality gap.
+
+Recipe that fits our style without competing for attention:
+
+- Breathe the container/panel opacity between **90 and 100** (or scale 0.99 → 1.01), sine-like
+  ease-in-out, amplitude ≤20% of the primary motion's energy.
+- **The cycle length must divide the loop exactly** — use **180 frames (2 cycles)** or
+  **360 frames (1 cycle)**. Anything else visibly snaps at the loop point.
+- If multiple ambient elements exist, give them different cycle lengths and offsets so they
+  don't pulse in sync.
+- Never animate node boxes, labels, or packets ambiently — the reading surface stays still.
+
+#### Accessibility gap (app-side, not content)
+
+The skill requires a `prefers-reduced-motion` alternative and that animations over 5 s be
+pausable. Our `lottie` markdown block only exposes `loop` / `autoplay` / `speed`, so neither
+is satisfiable from this repo — it needs handling in the `LottieAnimation` component. Keep
+critical information **out of motion alone**: every animation must still make sense from a
+single frozen frame, since that's what a reduced-motion viewer will get.
+
+#### Pre-export quality gate
+
+Before handing off for export, confirm: archetype consistent, no linear spatial easing, no
+opacity-only state changes, no unbroken motion past 1/3 of the canvas, one packet in flight
+at a time, all three motion layers present, ambient cycle divides 360 evenly, every state
+reverted before the loop point, and the animation readable at full speed.
+
+### Internal layer naming
+
+Prefix by role so later edits are scriptable. Final render order, **top → bottom**:
+
+```
+packet-*        (e.g. packet-request, packet-response, packet-retry-to-b)
+badge-*         (e.g. badge-timeout, badge-success)
+edgelabel-*     (e.g. edgelabel-request, edgelabel-retry)
+label-<Node>    (e.g. label-Load Balancer)
+box-*           (e.g. box-lb, box-server-a)
+line-<a>-<b>    (e.g. line-client-lb, line-lb-server-a)
+grouptitle-*    (e.g. grouptitle-server-pool)
+container-*     (e.g. container-server-pool)
+```
+
+Because layers **prepend**, create them in the **reverse** of this list — containers first,
+packets last — then assert the final order matches.
+
+### Verifying without eyes
+
+The agent can't render the canvas, so verification means reading state back:
+
+```js
+console.log(scene.layers.map((l) => l.name));                    // render order
+console.log(box.fills[0].color.getValueAt(200));                 // color at a frame
+console.log(packet.position.getValueAt(320));                    // motion endpoints
+console.log(line.trimPaths[0].end.getValueAt(50));               // draw-in complete
+console.log(layer.opacity.getValueAt(360), layer.startFrame, layer.endFrame);
+```
+
+Check at minimum: layer order, every state change *and* its revert, packet start/end
+positions, and that opacity returns to its frame-0 value by the loop point. Then hand off to
+a human for the visual check — flag label centering explicitly, since it's the most common
+visual defect.
+
+### Export and publish
+
+The human exports; the agent wires it up.
+
+1. **Before exporting**, set `scene.name` to the target file slug (e.g.
+   `client-server-architecture-failover`). It becomes the animation id inside the container.
+2. Export as **dotLottie (`.lottie`)**, not raw Lottie JSON.
+3. Save to `assets/lottie/<track-slug>/<lesson-slug>-<descriptor>.lottie`.
+4. Verify the container looks like the reference:
+   ```
+   my-animation.lottie
+   ├── manifest.json                    { "version": "2", "animations": [{ "id": "<slug>" }], ... }
+   ├── a/<slug>.json                    the animation
+   └── f/Cal Sans Regular.ttf           fonts are embedded automatically
+   ```
+5. Add the `lottie` block to the lesson markdown (replacing the `mermaid` block it
+   supersedes, if any).
+6. **Do not push the markdown before the asset file exists** — that ships a dangling CDN
+   reference that renders as a broken block.
+7. Push to `main`, then purge:
+   `https://purge.jsdelivr.net/gh/sauravgpt/sauravgptin-content@main/assets/lottie/<track>/<file>.lottie`
+
+### Where to store exported animations
 
 ```
 assets/
@@ -416,84 +683,54 @@ assets/
 - `shared/` holds reusable animations used across multiple tracks
 - If a lesson has multiple animations, each gets a distinct descriptor suffix
 
-### Theming Lottie animations (light / dark)
+### Theming (planned — NOT implemented)
 
-The app supports 3 color themes (Minimalist, GenZ, Google) × 2 modes (light/dark) = 6
-combinations. To keep animations manageable, we flatten to **2 embedded themes** inside
-each `.lottie` file: `light` and `dark`. The palette uses **indigo** as the universal
-accent — it blends naturally with all 3 app themes (zinc, fuchsia/violet, Google-blue).
+**Author with the light palette above. Do not attempt to embed themes yet.**
 
-**Universal Lottie color palette:**
+The intent is 2 embedded themes per `.lottie` (`light` and `dark`) that the app swaps at
+runtime by passing `themeId`. It isn't wired up:
 
-| Role | Light (`light` theme) | Dark (`dark` theme) |
-|------|-----------------------|---------------------|
-| Background | `#f4f4f5` | `#27272a` |
+- No shipped asset contains a `themes/` (or `t/`) entry — the containers are
+  `manifest.json` + `a/*.json` + `f/*.ttf` only.
+- Real dotLottie theming needs `themes` declared in `manifest.json` **plus** slot ids
+  (`sid`) on the themable properties inside the animation JSON. **Creator does not emit
+  slots**, so a hand-written flat `{ "primary": "#6366f1" }` theme file does nothing.
+
+`themeId` is accepted by the markdown block and is optional; with no embedded themes the
+animation simply renders with its authored colors, which is the current behavior everywhere.
+
+Dark-mode values reserved for when this is implemented:
+
+| Role | Light | Dark |
+|------|-------|------|
+| Node fill / accent | `#6366f1` | `#a5b4fc` |
+| Connector line / secondary | `#64748b` | `#94a3b8` |
+| Panel fill | `#f4f4f5` | `#27272a` |
+| Panel border | `#cbd5e1` | `#475569` |
 | Surface | `#ffffff` | `#18181b` |
-| Primary/Accent | `#6366f1` | `#a5b4fc` |
-| Secondary | `#64748b` | `#94a3b8` |
-| Foreground/Text | `#1e1b4b` | `#e0e7ff` |
-| Border/Line | `#cbd5e1` | `#475569` |
+| Text | `#1e1b4b` | `#e0e7ff` |
 | Success | `#16a34a` | `#4ade80` |
 | Error | `#dc2626` | `#f87171` |
-| Info/Highlight | `#2563eb` | `#60a5fa` |
+| Info / highlight | `#2563eb` | `#60a5fa` |
 
-**How it works at runtime:**
+### Motion Design Skill (installed)
 
-1. The app detects the user's current color mode (light or dark).
-2. It passes `themeId: "light"` or `themeId: "dark"` to the `LottieAnimation` component.
-3. The dotLottie player reads the matching embedded theme from the `.lottie` file and
-   swaps all mapped colors instantly — no re-download, no flicker.
+The skill is already installed and vendored at `.kiro/skills/motion-design/` (v1.0.0, from
+[LottieFiles/motion-design-skill](https://github.com/LottieFiles/motion-design-skill)). Kiro
+loads it automatically at session start. See "Applying the motion-design skill" above for how
+its guidance maps onto this repo's explainer diagrams, and which of its numbers to ignore.
 
-**Usage in markdown (with theming):**
+To reinstall or update it:
 
-````markdown
-```lottie
-{ "src": "https://cdn.jsdelivr.net/gh/sauravgpt/sauravgptin-content@main/assets/lottie/system-design/caching-strategies-layers.lottie", "loop": true, "autoplay": true, "speed": 1, "themeId": "light" }
-```
-````
-
-> **Note:** `themeId` is optional. If omitted, the animation renders with its default
-> (authored) colors. The app will auto-pass the correct `themeId` based on the user's
-> current mode when support is wired up.
-
-**Authoring themed `.lottie` files:**
-
-When creating animations in LottieFiles Creator, define two theme variants inside the
-`.lottie` export using the colors above. The `.lottie` container structure:
-
-```
-my-animation.lottie
-├── animation.json        (raw animation with default/light colors)
-└── themes/
-    ├── light.json        { "primary": "#6366f1", "surface": "#ffffff", ... }
-    └── dark.json         { "primary": "#a5b4fc", "surface": "#18181b", ... }
+```bash
+npx skills add LottieFiles/motion-design-skill
 ```
 
-### Canvas size standards
+Two gotchas:
 
-Lottie is vector-based, so animations scale losslessly — what matters for a consistent
-look is the **aspect ratio**, plus a shared working scale so stroke widths, font sizes,
-and spacing feel uniform across animations. Always pick one of these presets:
-
-| Preset | Size | Ratio | Use for |
-|--------|------|-------|---------|
-| `wide` | 1200 × 500 | 12:5 | Left-to-right pipelines and flow diagrams (e.g. client → server chains, request lifecycles) |
-| `standard` | 1200 × 675 | 16:9 | General diagrams, layered architectures, sequence-style animations — the default when unsure |
-| `tall` | 800 × 1000 | 4:5 | Vertical stacks (e.g. layered caches, protocol stacks, top-down hierarchies) |
-| `square` | 600 × 600 | 1:1 | Icons, spinners, small inline illustrations (most `shared/` animations) |
-
-**Authoring conventions (at the working scales above):**
-
-- Framerate: **60 fps**; duration: **4–8 s**, looping
-- Node boxes: ~**160 × 60 px**, corner roundness **12**
-- Connection lines: **3 px** stroke; container/panel borders: **2 px**, roundness **16**
-- Labels: **16–17 px**; group/panel titles: **15 px**; animated dots: **12–16 px** diameter
-- Keep ~**40 px** minimum padding between content and canvas edges
-
-**Rules:**
-
-- Do NOT invent new canvas sizes — pick the closest preset and adapt the layout
-- The app renders animations at the content column width, so `wide`/`standard` display
-  near 1:1; `tall` and `square` are constrained by height
-- Scene background must be transparent (it isn't exported, but keep it `null` in
-  Creator so the preview matches reality)
+- It must live under **`.kiro/skills/`** for Kiro to discover it — discovery is a scan for
+  `.kiro/skills/*/SKILL.md`. `npx skills add` may default to `.agents/skills/`, which Kiro
+  does **not** scan; move it if so.
+- The CLI also writes a `skills-lock.json` (source + content hash). Kiro doesn't read it and
+  we don't keep it, since the skill files are vendored here directly. Delete it after
+  installing, or keep it if you want upstream drift detection.
