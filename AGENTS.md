@@ -422,6 +422,16 @@ new sizes:
 - Scene background must be **transparent** (`scene.backgroundColor = null`). It isn't
   exported either way, but keeping it null makes the Creator preview match reality.
 - Keep ~**40 px** minimum padding between content and the canvas edges.
+- **Centre the composition, and prove it by arithmetic.** Compute the real content bounds —
+  including lifelines, container edges, and anything else that reads as an edge — then check
+  that top padding equals bottom padding and left equals right. Eyeballed padding drifts:
+  laying out downward from a comfortable top margin reliably leaves the whole diagram sitting
+  low. Log it as part of the build:
+  ```js
+  const top = /* topmost edge */, bottom = /* bottommost edge */;
+  console.log('centre', (top + bottom) / 2, 'vs', scene.size.height / 2,
+              '| padding', top, '/', scene.size.height - bottom);
+  ```
 
 ### Palette (light — the only palette currently shipped)
 
@@ -449,6 +459,7 @@ Google-blue). These are the values actually used by the shipped assets — match
 | Element | Spec |
 |---------|------|
 | Node box | Rectangle 160 × 60, roundness **12**, solid `#6366f1` fill, no stroke |
+| Node box (wide variant) | Rectangle **240 × 60**, same fill/roundness — only when the label cannot fit 160 px |
 | Node label | Cal Sans Regular, **17 px** (16 px for short labels), centered, `#ffffff` |
 | Connector line | 2-point path, **3 px** stroke `#64748b`, revealed with a trim path |
 | Packet / dot | Ellipse **16 × 16**, solid `#f97316` fill |
@@ -456,6 +467,52 @@ Google-blue). These are the values actually used by the shipped assets — match
 | Group title | Cal Sans Regular **15 px**, centered, `#1e1b4b`, placed **inside** the container ~18 px below its top edge |
 | Edge label | Cal Sans Regular **15 px**, centered, `#64748b`, offset clear of the line |
 | Status badge | Cal Sans Regular **16 px**, centered, `#16a34a` / `#dc2626` |
+| Branding watermark | Cal Sans Regular **14 px**, `#64748b` at **55 % opacity**, top-right — see below |
+
+### Branding watermark (REQUIRED in every animation)
+
+**Every animation must carry `learn.sauravgpt.in` in the top-right corner.** These assets are
+served from a public CDN and get screenshotted and reshared, so the watermark travels with
+them.
+
+Spec:
+
+- Text `learn.sauravgpt.in`, Cal Sans Regular **14 px**, `#64748b`, **55 % opacity** — legible
+  but never competing with the diagram.
+- **Topmost layer** (`bringToFront()`), named `branding-learn-sauravgpt-in`, so nothing can
+  cover it.
+- **40 px right margin**, baseline anchor at **y = 46**.
+- Fades in with the containers (frames 0 → 14, to 55 not 100), then holds. **No ambient
+  motion** — it must not draw the eye.
+- Reserve the top-right corner for it: keep diagram content clear of that area.
+
+Because labels are centre-aligned, compute the anchor x from the measured text width rather
+than guessing. At 14 px the string is **114.5 px** wide, so:
+
+| Canvas width | Centre-anchor x | Spans |
+|--------------|-----------------|-------|
+| 1200 (`wide`, `standard`) | `1102.8` | 1045.5 .. 1160.0 |
+| 800 (`tall`) | `702.8` | 645.5 .. 760.0 |
+| 600 (`square`) | `502.8` | 445.5 .. 560.0 |
+
+```js
+const brand = scene.createTextLayer({
+  text: 'learn.sauravgpt.in',
+  position: { x: 1102.8, y: 46 },            // 1200 - 40 - 114.5/2
+  fontFamily: 'Cal Sans', fontStyle: 'Regular', fontSize: 14,
+  alignment: 'center',
+  fill: { type: 'SOLID', color: { r: 100, g: 116, b: 139 } },
+});
+brand.name = 'branding-learn-sauravgpt-in';
+brand.opacity.addKeyframes([
+  { frame: 0, value: 0, easing: ENTER },
+  { frame: 14, value: 55 },
+]);
+brand.bringToFront();
+```
+
+On a `square` canvas (600 × 600 icons and spinners) the watermark can crowd the artwork — if
+it genuinely doesn't fit, shrink the artwork rather than dropping the watermark.
 
 ### Coordinate conventions
 
@@ -470,6 +527,11 @@ Non-obvious, and the easiest thing to get wrong:
   `position.y = boxCenterY + 6`. The text anchor sits ~6 px above the optical center at
   17 px; this nudge matches the shipped asset. Labels *not* inside a box need no nudge.
 - Use `alignment: 'center'` on every label so the x position is the visual center.
+- **Measure long labels before choosing a layout.** Node text must clear its box with ≥10 px
+  padding each side. Some source labels simply cannot fit 160 px — `Message Queue
+  (Kafka/Redis)` is 222 px at 16 px — so use the **240 px wide box at 15 px** rather than
+  truncating the label or shrinking type below 15 px. The font ships inside every exported
+  `.lottie`, so widths can be measured exactly from the embedded TTF instead of guessed.
 
 ```js
 // shape layer: layer stays at origin, shapes carry absolute coords
@@ -604,16 +666,19 @@ single frozen frame, since that's what a reduced-motion viewer will get.
 
 #### Pre-export quality gate
 
-Before handing off for export, confirm: archetype consistent, no linear spatial easing, no
-opacity-only state changes, no unbroken motion past 1/3 of the canvas, one packet in flight
-at a time, all three motion layers present, ambient cycle divides 360 evenly, every state
-reverted before the loop point, and the animation readable at full speed.
+Before handing off for export, confirm: **branding watermark present as the topmost layer**,
+composition centred (top padding == bottom padding,
+left == right), archetype consistent, no linear spatial easing, no opacity-only state changes,
+no unbroken motion past 1/3 of the canvas, one packet in flight at a time, all three motion
+layers present, ambient cycle divides 360 evenly, every state reverted before the loop point,
+no layer named `NaN`, and the animation readable at full speed.
 
 ### Internal layer naming
 
 Prefix by role so later edits are scriptable. Final render order, **top → bottom**:
 
 ```
+branding-learn-sauravgpt-in   (always topmost)
 packet-*        (e.g. packet-request, packet-response, packet-retry-to-b)
 badge-*         (e.g. badge-timeout, badge-success)
 edgelabel-*     (e.g. edgelabel-request, edgelabel-retry)

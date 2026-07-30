@@ -22,15 +22,8 @@ Polling is the digital equivalent of a child asking, *"Are we there yet?"* repea
 ### Short Polling
 In Short Polling, the client sends a request at a fixed interval (e.g., every 5 seconds). Use cases include dashboards or status checks where "real-time" isn't critical.
 
-```mermaid
-sequenceDiagram
-    participant C as Client
-    participant S as Server
-    C->>S: HTTP Request (Any new data?)
-    S-->>C: HTTP Response (No)
-    Note over C,S: Wait 5 seconds
-    C->>S: HTTP Request (Any new data?)
-    S-->>C: HTTP Response (Yes, here it is)
+```lottie
+{ "src": "https://cdn.jsdelivr.net/gh/sauravgpt/sauravgptin-content@main/assets/lottie/system-design/polling-vs-streaming-short-polling.lottie", "loop": true, "autoplay": true, "speed": 1 }
 ```
 
 *   **Pros**: Simple to implement; standard HTTP semantics.
@@ -64,16 +57,8 @@ SSE is a standard API allows servers to push updates to the client over a single
 ### WebSockets
 WebSockets provide a **full-duplex** communication channel over a single TCP connection. Both client and server can send messages independently at any time.
 
-```mermaid
-sequenceDiagram
-    participant Client
-    participant Server
-    Client->>Server: HTTP Handshake (Upgrade to WebSocket)
-    Server-->>Client: 101 Switching Protocols
-    Note over Client,Server: Persistent Connection Established
-    Server->>Client: Push Data (Updates)
-    Client->>Server: Send Message (User Action)
-    Server->>Client: Push Data (More Updates)
+```lottie
+{ "src": "https://cdn.jsdelivr.net/gh/sauravgpt/sauravgptin-content@main/assets/lottie/system-design/polling-vs-streaming-websockets.lottie", "loop": true, "autoplay": true, "speed": 1 }
 ```
 
 *   **Ideal for**: Chat apps, Multiplayer games, Collaborative editing.
@@ -86,19 +71,8 @@ sequenceDiagram
 
 These patterns typically sit at the **Gateway** or **BFF (Backend for Frontend)** layer.
 
-```mermaid
-graph TD
-    Client[Client App]
-    LB[Load Balancer]
-    API["API Gateway / Socket Server"]
-    Msg["Message Queue (Kafka/Redis)"]
-    Worker[Backend Worker]
-
-    Client -- "WebSocket / Polling" --> LB
-    LB --> API
-    Worker -- "Publishes Event" --> Msg
-    Msg -- "Subscribes" --> API
-    API -- "Pushes Update" --> Client
+```lottie
+{ "src": "https://cdn.jsdelivr.net/gh/sauravgpt/sauravgptin-content@main/assets/lottie/system-design/polling-vs-streaming-realtime-architecture.lottie", "loop": true, "autoplay": true, "speed": 1 }
 ```
 
 ---
