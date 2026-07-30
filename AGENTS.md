@@ -386,6 +386,15 @@ Things that will silently waste a cycle if you don't know them:
   someLayer.bringToFront();                     // or moveBefore / moveAfter / sendToBack
   ```
 - **No top-level `await`** — it's a syntax error in the sandbox.
+- **`createTextLayer` mangles a computed `name` into the string `"NaN"`.** Passing a template
+  literal or any non-literal expression as `name` silently produces a layer called `NaN`.
+  `createShapeLayer` handles the same expression fine. Workaround — assign the name after
+  creation:
+  ```js
+  const l = scene.createTextLayer({ text, position, /* ...no name... */ });
+  l.name = `edgelabel-${side}-${i + 1}`; // this works
+  ```
+  Always log `scene.layers.map((l) => l.name)` after a build and check for `NaN`.
 - **Async output is lost** — `console.log` inside a `.then()` callback is not captured, so
   `creator.getAvailableFonts()` is effectively unusable. Just hardcode the house font
   (`fontFamily: 'Cal Sans'`, `fontStyle: 'Regular'`).
@@ -642,6 +651,11 @@ The human exports; the agent wires it up.
 1. **Before exporting**, set `scene.name` to the target file slug (e.g.
    `client-server-architecture-failover`). It becomes the animation id inside the container.
 2. Export as **dotLottie (`.lottie`)**, not raw Lottie JSON.
+   **Always export at 1x speed**, even if the lesson should play slower. Pace belongs in the
+   markdown `speed` prop, not baked into the asset — that keeps every file at the canonical
+   360 frames / 60 fps (so documented frame numbers still describe it), keeps the pace
+   reversible without a re-export, and avoids Creator possibly implementing a slower export
+   by dropping the framerate instead of extending the timeline.
 3. Save to `assets/lottie/<track-slug>/<lesson-slug>-<descriptor>.lottie`.
 4. Verify the container looks like the reference:
    ```
