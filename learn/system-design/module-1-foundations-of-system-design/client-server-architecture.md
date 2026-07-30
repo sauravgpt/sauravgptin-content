@@ -151,27 +151,15 @@ Historically, servers struggled to handle more than 10,000 concurrent connection
 *   **Retries**: Clients should implement retry logic with **exponential backoff** to avoid overwhelming a recovering server.
 *   **Timeouts**: Requests must have strict timeouts to prevent clients from hanging indefinitely, which consumes resources on both ends.
 
-```mermaid
-sequenceDiagram
-  participant Client
-  participant LB as Load Balancer
-  participant Server A
-  participant Server B
-
-  Client->>LB: Request 1
-  LB->>Server A: Forward Request
-  Note right of Server A: Server A crashes!
-  Server A--xLB: Timeout / Error
-  LB->>Server B: Retry Request
-  Server B->>LB: Success Response
-  LB->>Client: Response
+```lottie
+{ "src": "https://cdn.jsdelivr.net/gh/sauravgpt/sauravgptin-content@main/assets/lottie/system-design/client-server-architecture-failover.lottie", "loop": true, "autoplay": true, "speed": 1 }
 ```
 
 ```callout
 {
   "type": "tip",
   "title": "Pro Tip: Idempotency",
-  "content": "Safe retries rely on **idempotency**. Ensure that your API design allows the same request to be executed multiple times without unintended side effects (e.g., charging a credit card twice)."
+  "content": "Safe retries rely on idempotency. Ensure that your API design allows the same request to be executed multiple times without unintended side effects (e.g., charging a credit card twice)."
 }
 ```
 
