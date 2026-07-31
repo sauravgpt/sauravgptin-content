@@ -23,26 +23,8 @@ Caching doesn't exist at a single layer; it is ubiquitous across the entire stac
 4.  **Application Caching**: In-memory caches (e.g., Redis, Memcached) typically situated before the database to offload read traffic.
 5.  **Database Caching**: Databases themselves have internal buffer pools and query caches.
 
-```mermaid
-flowchart TD
-    User([User])
-    Browser[Browser / Client Cache]
-    CDN[CDN Edge]
-    LB[Load Balancer]
-    App[Application Service]
-    Cache[(Distributed Cache\nRedis/Memcached)]
-    DB[(Primary Database)]
-
-    User --> Browser
-    Browser -->|Miss| CDN
-    CDN -->|Miss| LB
-    LB -->|Request| App
-    App -->|1. Check| Cache
-    Cache --o|2. Hit| App
-    App -->|3. Miss? Read| DB
-    DB --> App
-    App -->|4. Update| Cache
-    App -->|Response| LB
+```lottie
+{ "src": "https://cdn.jsdelivr.net/gh/sauravgpt/sauravgptin-content@main/assets/lottie/system-design/caching-cache-layers.lottie", "loop": true, "autoplay": true, "speed": 0.6 }
 ```
 
 ```callout
@@ -129,22 +111,8 @@ The application writes directly to the **database**, bypassing the cache. Data i
 *   **Cons**: First read is always a "cache miss" (slower).
 *   **Best For**: Archival data, logs, or "write-once-read-rarely" content.
 
-```mermaid
-flowchart LR
-    subgraph Write_Through [Write-Through Strategy]
-        direction LR
-        App1[App] -->|1. Write| C1[Cache]
-        C1 -->|2. Sync Write| DB1[Database]
-        DB1 -.->|3. Ack| C1
-        C1 -.->|4. Ack| App1
-    end
-
-    subgraph Write_Back [Write-Back Strategy]
-        direction LR
-        App2[App] -->|1. Write| C2[Cache]
-        C2 -.->|2. Ack| App2
-        C2 -.-o|3. Async Sync| DB2[Database]
-    end
+```lottie
+{ "src": "https://cdn.jsdelivr.net/gh/sauravgpt/sauravgptin-content@main/assets/lottie/system-design/caching-write-strategies.lottie", "loop": true, "autoplay": true, "speed": 1 }
 ```
 
 ### Comparison: Write Strategies

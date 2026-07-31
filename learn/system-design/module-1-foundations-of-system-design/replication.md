@@ -17,22 +17,8 @@ Replication isn't just about having a backup; it solves three critical engineeri
 2.  **Reduced Latency:** By placing data geographically closer to users (e.g., US and India regions), we reduce the time data travels over the network.
 3.  **Read Scalability:** A single machine has limits. Replication allows you to distribute read queries across multiple replicas, increasing total system throughput.
 
-```mermaid
-graph TD
-    User((User))
-    LB["Load Balancer"]
-    Master["Primary Node (Writes)"]
-    Replica1["Replica Node 1 (Reads)"]
-    Replica2["Replica Node 2 (Reads)"]
-    
-    User -->|Read/Write| LB
-    LB -->|Writes| Master
-    LB -->|Reads| Replica1
-    LB -->|Reads| Replica2
-    
-    Master -.->|Replication Stream| Replica1
-    Master -.->|Replication Stream| Replica2
-    
+```lottie
+{ "src": "https://cdn.jsdelivr.net/gh/sauravgpt/sauravgptin-content@main/assets/lottie/system-design/replication-single-leader-topology.lottie", "loop": true, "autoplay": true, "speed": 1 }
 ```
 
 ```callout
@@ -120,23 +106,8 @@ Imagine a user updates their profile picture.
 **Solution:** **Read-Your-Own-Writes Consistency**.
 Use session stickiness or logic that routes reads for *user-modified* content to the Primary for a short window after a write, while fetching other data from Replicas.
 
-```mermaid
-sequenceDiagram
-    participant User
-    participant Primary
-    participant Replica
-    
-    User->>Primary: Write(Profile Photo)
-    Primary-->>User: Ack(Success)
-    
-    par Async Replication
-        Primary->>Replica: Send Update
-    and Read Request
-        User->>Replica: Read(Profile Photo)
-        Replica-->>User: Return (Old Photo)
-    end
-    
-    Note right of User: User sees old data due to Replication Lag!
+```lottie
+{ "src": "https://cdn.jsdelivr.net/gh/sauravgpt/sauravgptin-content@main/assets/lottie/system-design/replication-replication-lag.lottie", "loop": true, "autoplay": true, "speed": 1 }
 ```
 
 ```callout

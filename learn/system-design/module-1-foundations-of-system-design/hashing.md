@@ -25,18 +25,8 @@ At its core, a **hash function** transforms an input key into an integer value. 
 
 Hashing logic typically resides in the **Load Balancer** or the **Client SDK** (in smart client architectures). It acts as the decision engine for routing traffic to the backend server pool.
 
-```mermaid
-graph LR
-    ClientA[Client A] --> LB[Load Balancer]
-    ClientB[Client B] --> LB
-    ClientC[Client C] --> LB
-    
-    subgraph "Routing Logic"
-    LB -- "Hash(ClientA) % 3 = 0" --> Server1[Server Node 1]
-    LB -- "Hash(ClientB) % 3 = 1" --> Server2[Server Node 2]
-    LB -- "Hash(ClientC) % 3 = 2" --> Server3[Server Node 3]
-    end
-    
+```lottie
+{ "src": "https://cdn.jsdelivr.net/gh/sauravgpt/sauravgptin-content@main/assets/lottie/system-design/hashing-modulo-routing.lottie", "loop": true, "autoplay": true, "speed": 1 }
 ```
 
 ---

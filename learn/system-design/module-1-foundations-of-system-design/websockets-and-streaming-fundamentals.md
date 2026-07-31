@@ -20,20 +20,8 @@ In large-scale systems, the decision between "pulling" data (Polling) and "pushi
 
 Real-time protocols sit at the **Application Layer**, managing how clients (browsers, mobile apps) maintain a persistent or semi-persistent link to the backend infrastructure.
 
-```mermaid
-graph TD
-    Client["Client Browser/App"]
-    LB["Load Balancer"]
-    API["API Gateway"]
-    SocketServer["WebSocket Server"]
-    MsgQueue["Message Queue (Kafka/Redis)"]
-    DB[("Database")]
-
-    Client <-->|Persistent Connection| LB
-    LB <-->|TCP/WebSocket| API
-    API <-->|Upgrade Header| SocketServer
-    SocketServer <-->|Subscribes| MsgQueue
-    MsgQueue <---|Publish Updates| DB
+```lottie
+{ "src": "https://cdn.jsdelivr.net/gh/sauravgpt/sauravgptin-content@main/assets/lottie/system-design/websockets-and-streaming-fundamentals-realtime-path.lottie", "loop": true, "autoplay": true, "speed": 1 }
 ```
 
 ```callout

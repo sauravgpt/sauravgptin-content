@@ -40,13 +40,8 @@ It focuses on the volume of data or requests processed rather than the speed of 
 
 Latency and throughput manifest at every layer of a system. Understanding where bottlenecks occur is key to optimization.
 
-```mermaid
-graph LR
-    Client[Client Device] -->|Latency: RTT| LB[Load Balancer]
-    LB -->|Throughput: RPS| WebServer[Web Server]
-    WebServer -->|Processing Time| Cache[Redis Cache]
-    WebServer -->|I/O Latency| DB[(Database)]
-    
+```lottie
+{ "src": "https://cdn.jsdelivr.net/gh/sauravgpt/sauravgptin-content@main/assets/lottie/system-design/latency-throughput-pipeline.lottie", "loop": true, "autoplay": true, "speed": 1 }
 ```
 
 ---
