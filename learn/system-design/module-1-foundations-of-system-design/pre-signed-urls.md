@@ -18,13 +18,8 @@ When a user uploads a large file (e.g., a 4K video) through your application ser
 2.  **Resource Contention**: The server's CPU and memory are tied up streaming bytes instead of handling business logic.
 3.  **Connection Limits**: Long-lived connections exhaust thread pools or file descriptors, limiting the number of concurrent users.
 
-```mermaid
-graph LR
-    subgraph Traditional["Traditional Upload ( bottleneck )"]
-    C1[Client] -- "1. Upload File" --> App[App Server]
-    App -- "2. Fwd to Storage" --> Store[Object Storage]
-
-    end
+```lottie
+{ "src": "https://cdn.jsdelivr.net/gh/sauravgpt/sauravgptin-content@main/assets/lottie/system-design/pre-signed-urls-traditional-upload.lottie", "loop": true, "autoplay": true, "speed": 1 }
 ```
 
 ## How Pre-signed URLs Work
@@ -38,20 +33,8 @@ A Pre-signed URL is a time-limited, cryptographically signed link that grants sp
 3.  **Return**: Application returns the signed URL to the client.
 4.  **Transfer**: Client uploads the file directly to the Storage Provider using the signed URL.
 
-```mermaid
-sequenceDiagram
-    participant C as Client
-    participant A as App Server
-    participant S as Object Storage
-
-    C->>A: 1. Request Upload Permission
-    A->>A: Validate Auth & Permissions
-    A->>S: 2. Generate Signed URL (PUT, 15min exp)
-    S-->>A: Returns Signed URL
-    A-->>C: 3. Return Signed URL
-    C->>S: 4. Upload File Directly (STRICT DATA PLANE)
-    S-->>C: 200 OK
-    C->>A: 5. Confirm Upload Complete (Optional)
+```lottie
+{ "src": "https://cdn.jsdelivr.net/gh/sauravgpt/sauravgptin-content@main/assets/lottie/system-design/pre-signed-urls-signed-url-flow.lottie", "loop": true, "autoplay": true, "speed": 0.7 }
 ```
 
 ```callout

@@ -31,20 +31,8 @@ SPOFs can exist at any layer of the stack:
 
 ### Architecture: SPOF vs. Redundancy
 
-```mermaid
-graph TD
-    subgraph "SPOF Architecture"
-        Users1[Users] --> LB1["Load Balancer (SPOF)"]
-        LB1 --> App1[App Server]
-        App1 --> DB1["Single Database (SPOF)"]
-    end
-
-    subgraph "High Availability Architecture"
-        Users2[Users] --> DNS["DNS / Global LB"]
-        DNS --> LB2_A[Load Balancer A] & LB2_B[Load Balancer B]
-        LB2_A & LB2_B --> App2_A[App Server 1] & App2_B[App Server 2]
-        App2_A & App2_B --> DB_Cluster["DB Cluster (Primary/Replica)"]
-    end
+```lottie
+{ "src": "https://cdn.jsdelivr.net/gh/sauravgpt/sauravgptin-content@main/assets/lottie/system-design/single-point-of-failure-spof-vs-ha.lottie", "loop": true, "autoplay": true, "speed": 1 }
 ```
 
 ---

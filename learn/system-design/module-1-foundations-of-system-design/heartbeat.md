@@ -26,14 +26,8 @@ Heartbeats serve two critical functions in reliability engineering:
 1.  **Failure Detection**: Identifying when a node has died or become unreachable so the system can trigger recovery (e.g., spinning up a replacement).
 2.  **Route Management**: Ensuring traffic is only sent to healthy instances (e.g., removing a failed node from a load balancer pool).
 
-```mermaid
-graph LR
-    subgraph "Healthy State"
-    LB[Load Balancer] -->|HTTP 200| S1[Server 1]
-    LB -->|HTTP 200| S2[Server 2]
-    S1 -.->|Heartbeat| LB
-    S2 -.->|Heartbeat| LB
-    end
+```lottie
+{ "src": "https://cdn.jsdelivr.net/gh/sauravgpt/sauravgptin-content@main/assets/lottie/system-design/heartbeat-healthy-state.lottie", "loop": true, "autoplay": true, "speed": 1 }
 ```
 
 ## Real-World Use Cases

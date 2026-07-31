@@ -25,24 +25,8 @@ In large-scale distributed systems, DNS is far more than just a "phonebook." It 
 
 DNS resolution is the **precursor** to any network interaction. Before a client (browser, mobile app, or microservice) can open a TCP connection to your load balancer or API gateway, it must first resolve the destination IP. This process involves a chain of distributed servers.
 
-```mermaid
-sequenceDiagram
-    participant Client
-    participant Resolver as Recursive Resolver
-    participant Root as Root Server (.)
-    participant TLD as TLD Server (.com)
-    participant Auth as Auth Nameserver (Route53)
-
-    Client->>Resolver: Where is sauravgpt.in?
-    alt Cache Miss
-        Resolver->>Root: Where is .com?
-        Root-->>Resolver: Go to TLD Server (IP)
-        Resolver->>TLD: Where is example.com?
-        TLD-->>Resolver: Go to Auth Nameserver (IP)
-        Resolver->>Auth: What is IP for sauravgpt.in?
-        Auth-->>Resolver: IP is 203.0.113.5
-    end
-    Resolver-->>Client: Connection IP: 203.0.113.5
+```lottie
+{ "src": "https://cdn.jsdelivr.net/gh/sauravgpt/sauravgptin-content@main/assets/lottie/system-design/dns-recursive-resolution.lottie", "loop": true, "autoplay": true, "speed": 0.7 }
 ```
 
 1. **Recursive Resolution**
