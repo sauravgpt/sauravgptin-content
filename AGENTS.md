@@ -486,8 +486,9 @@ Spec:
   motion** — it must not draw the eye.
 - Reserve the top-right corner for it: keep diagram content clear of that area.
 
-Because labels are centre-aligned, compute the anchor x from the measured text width rather
-than guessing. At 14 px the string is **114.5 px** wide, so:
+Because labels are centre-aligned, the anchor x depends on the text width. At 14 px the string
+is **114.5 px** wide, giving the values below — or run
+`tools/measure-text.py --size 14 --canvas <w> --margin 40 "learn.sauravgpt.in"`:
 
 | Canvas width | Centre-anchor x | Spans |
 |--------------|-----------------|-------|
@@ -527,11 +528,31 @@ Non-obvious, and the easiest thing to get wrong:
   `position.y = boxCenterY + 6`. The text anchor sits ~6 px above the optical center at
   17 px; this nudge matches the shipped asset. Labels *not* inside a box need no nudge.
 - Use `alignment: 'center'` on every label so the x position is the visual center.
-- **Measure long labels before choosing a layout.** Node text must clear its box with ≥10 px
-  padding each side. Some source labels simply cannot fit 160 px — `Message Queue
-  (Kafka/Redis)` is 222 px at 16 px — so use the **240 px wide box at 15 px** rather than
-  truncating the label or shrinking type below 15 px. The font ships inside every exported
-  `.lottie`, so widths can be measured exactly from the embedded TTF instead of guessed.
+- **Measure long labels before choosing a layout** — don't guess, and don't discover the
+  overflow by eye in Creator. Node text must clear its box with ≥10 px padding each side.
+  Some source labels simply cannot fit 160 px, so use the **240 px wide box at 15 px** rather
+  than truncating the label or shrinking type below 15 px.
+
+  Use `tools/measure-text.py`, which reads the real glyph advances from the font embedded in
+  any exported `.lottie`:
+
+  ```bash
+  # does it fit a node box?
+  tools/measure-text.py --size 17 --box 160 "Client Device" "Load Balancer"
+  #    99.1px @17  pad 30.5  OK       'Client Device'
+
+  # find a size that fits (exits 1 if anything overflows)
+  tools/measure-text.py --size 17 --size 16 --size 15 --box 160 "WebSocket Server"
+
+  # does an edge label fit the gap between two nodes?
+  tools/measure-text.py --size 15 --box 190 "Throughput: RPS"
+
+  # centre-anchor x for a right-aligned item
+  tools/measure-text.py --size 14 --canvas 1200 --margin 40 "learn.sauravgpt.in"
+  ```
+
+  Widths ignore kerning, so they are marginally conservative: anything reported as fitting
+  will fit.
 
 ```js
 // shape layer: layer stays at origin, shapes carry absolute coords
@@ -573,6 +594,34 @@ scene.createTextLayer({
   loop point, or the loop visibly jumps.
 - **Packet pattern**: fade in over 4 frames before the move, fade out over 4 frames after:
   `0 @ start-4 → 100 @ start → 100 @ end → 0 @ end+4`.
+#### Keeping packets from merging
+
+Two 16 px dots closer than ~16 px read as one blob. **Only mid-edge proximity is a defect** —
+packets bunch up at junctions (node centres and routing waypoints) as a matter of course when
+arriving, departing, handing off or fanning out, and that reads correctly as traffic at a node.
+Check accordingly, or you will retime beats forever without fixing anything visible:
+
+```js
+const nearJunction = (p) => JUNCTIONS.some((j) => Math.hypot(p.x - j.x, p.y - j.y) < 45);
+for (let f = 0; f <= 360; f++) {
+  // for each visible pair: skip if distance < 2 (exact handoff) or either is nearJunction
+  // everything left is mid-edge and must stay > 16px apart
+}
+```
+
+Two fixes, by cause:
+
+- **Opposite directions on the same edge → lane offsets.** Offset each packet **9 px
+  perpendicular** to the edge by its direction of travel (horizontal edges shift in y,
+  vertical in x), including at corner waypoints so it keeps its lane around bends. That holds
+  opposing packets 18 px apart. Retiming cannot fix this case: two packets crossing in
+  opposite directions on a shared path must meet somewhere unless fully separated in time,
+  which throws away the simultaneity that makes full-duplex legible.
+- **Same direction on the same edge → stagger by segment duration + 2.** Eased motion nearly
+  stops each packet at every waypoint, so a trailing packet catches the leader right there —
+  a 17-frame stagger on 30-frame hops closed to 12 px. A stagger of one full hop keeps each
+  packet a segment ahead: when one decelerates into a node the other decelerates into a
+  *different* node. (Measured: 12 px → 211 px.)
 
 ### Applying the motion-design skill
 
