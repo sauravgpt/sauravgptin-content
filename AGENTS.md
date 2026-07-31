@@ -515,6 +515,12 @@ brand.bringToFront();
 On a `square` canvas (600 × 600 icons and spinners) the watermark can crowd the artwork — if
 it genuinely doesn't fit, shrink the artwork rather than dropping the watermark.
 
+**Known gap — four assets predate this rule** and still need the watermark retrofitted (each
+means rebuilding the scene in Creator and re-exporting):
+`client-server-architecture-flow`, `client-server-architecture-failover`,
+`tcp-ip-http-basics-protocol-stack`, `tcp-ip-http-basics-keep-alive`. Until then
+`tools/verify-lottie.py` reports exactly these four as failing, which is expected.
+
 ### Coordinate conventions
 
 Non-obvious, and the easiest thing to get wrong:
